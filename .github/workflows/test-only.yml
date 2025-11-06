@@ -1,0 +1,32 @@
+name: Test Build
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-compile:
+    name: Test Compilation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**') }}
+
+      - name: Test Build
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: StandaloneWindows64
+          unityVersion: 2022.3.10f1
+          # Don't upload, just verify it builds
+
+      - name: Report Success
+        run: echo "✓ Build compiles successfully"
