@@ -23,10 +23,6 @@ A first-person psychological horror detective game with fixed-camera perspective
 2. Ensure PC platform is selected
 3. Build
 
-### Team
-
-- [Your name] - Project Lead
-
 ### Documentation
 
 See `/Documentation` folder for detailed guides.
