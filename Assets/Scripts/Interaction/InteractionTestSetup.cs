@@ -25,45 +25,77 @@ namespace NotAllNeighbours.Interaction
                 mainCamera = camObj.AddComponent<UnityEngine.Camera>();
                 camObj.tag = "MainCamera";
             }
-            
+
             // Add RaycastDetector
             RaycastDetector raycastDetector = FindObjectOfType<RaycastDetector>();
             if (raycastDetector == null)
             {
                 raycastDetector = mainCamera.gameObject.AddComponent<RaycastDetector>();
+                Debug.Log("Created RaycastDetector on camera");
             }
-            
-            // Add InteractionManager
-            InteractionManager interactionManager = FindObjectOfType<InteractionManager>();
-            if (interactionManager == null)
-            {
-                GameObject managerObj = new GameObject("InteractionManager");
-                interactionManager = managerObj.AddComponent<InteractionManager>();
-            }
-            
+
             // Add InvestigationZoom
             InvestigationZoom investigationZoom = FindObjectOfType<InvestigationZoom>();
             if (investigationZoom == null)
             {
                 investigationZoom = mainCamera.gameObject.AddComponent<InvestigationZoom>();
+                Debug.Log("Created InvestigationZoom on camera");
             }
-            
+
+            // Add InteractionManager and wire up references
+            InteractionManager interactionManager = FindObjectOfType<InteractionManager>();
+            if (interactionManager == null)
+            {
+                GameObject managerObj = new GameObject("InteractionManager");
+                interactionManager = managerObj.AddComponent<InteractionManager>();
+                Debug.Log("Created InteractionManager");
+            }
+
+            // Wire up InteractionManager references using reflection
+            var imType = typeof(InteractionManager);
+            var raycastField = imType.GetField("raycastDetector", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var zoomField = imType.GetField("investigationZoom", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            if (raycastField != null)
+            {
+                raycastField.SetValue(interactionManager, raycastDetector);
+                Debug.Log("Wired RaycastDetector to InteractionManager");
+            }
+
+            if (zoomField != null)
+            {
+                zoomField.SetValue(interactionManager, investigationZoom);
+                Debug.Log("Wired InvestigationZoom to InteractionManager");
+            }
+
             // Add InventorySystem
             InventorySystem inventorySystem = FindObjectOfType<InventorySystem>();
             if (inventorySystem == null)
             {
                 GameObject invObj = new GameObject("InventorySystem");
                 inventorySystem = invObj.AddComponent<InventorySystem>();
+                Debug.Log("Created InventorySystem");
             }
-            
-            // Add CursorManager
+
+            // Add CursorManager and wire up references
             CursorManager cursorManager = FindObjectOfType<CursorManager>();
             if (cursorManager == null)
             {
                 GameObject cursorObj = new GameObject("CursorManager");
                 cursorManager = cursorObj.AddComponent<CursorManager>();
+                Debug.Log("Created CursorManager");
             }
-            
+
+            // Wire up CursorManager reference using reflection
+            var cmType = typeof(CursorManager);
+            var cmRaycastField = cmType.GetField("raycastDetector", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            if (cmRaycastField != null)
+            {
+                cmRaycastField.SetValue(cursorManager, raycastDetector);
+                Debug.Log("Wired RaycastDetector to CursorManager");
+            }
+
             Debug.Log("Interaction system setup complete!");
         }
     }

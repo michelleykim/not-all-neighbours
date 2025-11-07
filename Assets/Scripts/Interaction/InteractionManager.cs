@@ -13,10 +13,24 @@ namespace NotAllNeighbours.Interaction
         [Header("Input")]
         [SerializeField] private InputActionReference interactAction;
         [SerializeField] private InputActionReference alternateInteractAction;
-        
+        [SerializeField] private bool useFallbackInput = true;
+
         [Header("Settings")]
         [SerializeField] private bool enableInteraction = true;
         
+        private void Awake()
+        {
+            if (raycastDetector == null)
+            {
+                raycastDetector = FindObjectOfType<RaycastDetector>();
+            }
+
+            if (investigationZoom == null)
+            {
+                investigationZoom = FindObjectOfType<InvestigationZoom>();
+            }
+        }
+
         private void OnEnable()
         {
             if (interactAction != null)
@@ -24,14 +38,14 @@ namespace NotAllNeighbours.Interaction
                 interactAction.action.Enable();
                 interactAction.action.performed += OnInteractPerformed;
             }
-            
+
             if (alternateInteractAction != null)
             {
                 alternateInteractAction.action.Enable();
                 alternateInteractAction.action.performed += OnAlternateInteractPerformed;
             }
         }
-        
+
         private void OnDisable()
         {
             if (interactAction != null)
@@ -39,32 +53,71 @@ namespace NotAllNeighbours.Interaction
                 interactAction.action.performed -= OnInteractPerformed;
                 interactAction.action.Disable();
             }
-            
+
             if (alternateInteractAction != null)
             {
                 alternateInteractAction.action.performed -= OnAlternateInteractPerformed;
                 alternateInteractAction.action.Disable();
             }
         }
+
+        private void Update()
+        {
+            // Fallback input when InputActionReferences are not set up
+            if (useFallbackInput && (interactAction == null || alternateInteractAction == null))
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E))
+                {
+                    HandleInteractInput();
+                }
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    HandleAlternateInteractInput();
+                }
+            }
+        }
         
         private void OnInteractPerformed(InputAction.CallbackContext context)
         {
+            HandleInteractInput();
+        }
+
+        private void OnAlternateInteractPerformed(InputAction.CallbackContext context)
+        {
+            HandleAlternateInteractInput();
+        }
+
+        private void HandleInteractInput()
+        {
             if (!enableInteraction) return;
-            
+
+            if (raycastDetector == null)
+            {
+                Debug.LogWarning("InteractionManager: RaycastDetector is not assigned!");
+                return;
+            }
+
             IInteractable hoveredObject = raycastDetector.GetCurrentHoveredObject();
-            
+
             if (hoveredObject != null && hoveredObject.CanInteract())
             {
                 ProcessInteraction(hoveredObject);
             }
         }
-        
-        private void OnAlternateInteractPerformed(InputAction.CallbackContext context)
+
+        private void HandleAlternateInteractInput()
         {
             if (!enableInteraction) return;
-            
+
+            if (raycastDetector == null)
+            {
+                Debug.LogWarning("InteractionManager: RaycastDetector is not assigned!");
+                return;
+            }
+
             IInteractable hoveredObject = raycastDetector.GetCurrentHoveredObject();
-            
+
             if (hoveredObject != null && hoveredObject.CanInteract())
             {
                 ProcessAlternateInteraction(hoveredObject);
