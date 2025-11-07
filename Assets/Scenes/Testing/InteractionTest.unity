@@ -595,7 +595,7 @@ GameObject:
   - component: {fileID: 590741691}
   - component: {fileID: 590741690}
   - component: {fileID: 590741694}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Door_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -711,7 +711,7 @@ MonoBehaviour:
   canInteract: 1
   requiresProximity: 0
   interactionRange: 2
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
   interactionIndicator: {fileID: 0}
   onInteract:
     m_PersistentCalls:
@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 813104615}
   - component: {fileID: 813104614}
   - component: {fileID: 813104618}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Examine_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -857,7 +857,7 @@ MonoBehaviour:
   canInteract: 1
   requiresProximity: 0
   interactionRange: 2
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
   interactionIndicator: {fileID: 0}
   onInteract:
     m_PersistentCalls:
@@ -1225,7 +1225,7 @@ GameObject:
   - component: {fileID: 1305563824}
   - component: {fileID: 1305563828}
   m_Layer: 7
-  m_Name: ExamineInteractable_Test
+  m_Name: Interactable_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1816,7 +1816,7 @@ MonoBehaviour:
   canInteract: 1
   requiresProximity: 0
   interactionRange: 2
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
   interactionIndicator: {fileID: 0}
   onInteract:
     m_PersistentCalls:

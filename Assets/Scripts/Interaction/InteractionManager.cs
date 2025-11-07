@@ -66,15 +66,22 @@ namespace NotAllNeighbours.Interaction
             // Fallback input when InputActionReferences are not set up
             if (useFallbackInput && (interactAction == null || alternateInteractAction == null))
             {
-                if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E))
+                // Use new Input System
+                var mouse = Mouse.current;
+                var keyboard = Keyboard.current;
+
+              if (mouse != null && keyboard != null)
+              {
+                if (mouse.leftButton.wasPressedThisFrame || keyboard.eKey.wasPressedThisFrame)
                 {
-                    HandleInteractInput();
+                  HandleInteractInput();
                 }
 
-                if (Input.GetMouseButtonDown(1))
+                if (mouse.rightButton.wasPressedThisFrame)
                 {
-                    HandleAlternateInteractInput();
+                  HandleAlternateInteractInput();
                 }
+              }
             }
         }
         
