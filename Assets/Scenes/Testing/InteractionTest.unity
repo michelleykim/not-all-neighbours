@@ -594,6 +594,7 @@ GameObject:
   - component: {fileID: 590741692}
   - component: {fileID: 590741691}
   - component: {fileID: 590741690}
+  - component: {fileID: 590741694}
   m_Layer: 0
   m_Name: Door_Test
   m_TagString: Untagged
@@ -693,6 +694,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &590741694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590741689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bef5fb5beb9acf42abfb4a92884c053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.DoorInteraction
+  interactionType: 6
+  interactionPrompt: Examine
+  canInteract: 1
+  requiresProximity: 0
+  interactionRange: 2
+  highlightMaterial: {fileID: 0}
+  interactionIndicator: {fileID: 0}
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  targetSceneName: 
+  targetSpawnPoint: {fileID: 0}
+  isLocked: 0
+  requiredKeyID: 
+  doorAnimator: {fileID: 0}
+  openTrigger: Open
 --- !u!1 &813104613
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,8 +740,9 @@ GameObject:
   - component: {fileID: 813104616}
   - component: {fileID: 813104615}
   - component: {fileID: 813104614}
+  - component: {fileID: 813104618}
   m_Layer: 0
-  m_Name: Investigate_Test
+  m_Name: Examine_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -804,6 +840,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &813104618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813104613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f82f46c8099fdce4bb22a55469fae5a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.ExaminableDocument
+  interactionType: 4
+  interactionPrompt: Examine
+  canInteract: 1
+  requiresProximity: 0
+  interactionRange: 2
+  highlightMaterial: {fileID: 0}
+  interactionIndicator: {fileID: 0}
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  documentTitle: 
+  documentText: 
+  documentImage: {fileID: 0}
+  addToJournal: 1
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,6 +885,8 @@ GameObject:
   - component: {fileID: 961739751}
   - component: {fileID: 961739750}
   - component: {fileID: 961739754}
+  - component: {fileID: 961739756}
+  - component: {fileID: 961739755}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -993,6 +1063,43 @@ MonoBehaviour:
   invertVerticalAxis: 0
   debugMode: 1
   showGizmos: 1
+--- !u!114 &961739755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961739749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9632b4d32f2c17943ab65abdb9cb0159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.RaycastDetector
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  raycastDistance: 100
+  showDebugRay: 1
+  mainCamera: {fileID: 961739752}
+--- !u!114 &961739756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961739749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f9aae5f0747bf84ba733dc56cee8d5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.InvestigationZoom
+  mainCamera: {fileID: 961739752}
+  zoomDistance: 1.5
+  zoomSpeed: 2
+  rotationSpeed: 100
+  allowRotation: 1
+  zoomUI: {fileID: 0}
+  exitPrompt: {fileID: 0}
 --- !u!1 &1287521426
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,8 +1223,9 @@ GameObject:
   - component: {fileID: 1305563826}
   - component: {fileID: 1305563825}
   - component: {fileID: 1305563824}
-  m_Layer: 0
-  m_Name: Examine_Test
+  - component: {fileID: 1305563828}
+  m_Layer: 7
+  m_Name: ExamineInteractable_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1215,6 +1323,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1305563828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305563823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e226dbbec7e2d6047ab5935f280fe8f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.InteractableObject
+  interactionType: 0
+  interactionPrompt: Examine this bed
+  canInteract: 1
+  requiresProximity: 0
+  interactionRange: 2
+  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
+  interactionIndicator: {fileID: 0}
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1315480330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,8 +1699,9 @@ GameObject:
   - component: {fileID: 2108159439}
   - component: {fileID: 2108159438}
   - component: {fileID: 2108159437}
-  m_Layer: 0
-  m_Name: Collect_Test
+  - component: {fileID: 2108159441}
+  m_Layer: 7
+  m_Name: Evidence_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1662,6 +1799,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2108159441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108159436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f629cbf53c29fc04498cec7380d5881c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.EvidenceObject
+  interactionType: 1
+  interactionPrompt: Examine
+  canInteract: 1
+  requiresProximity: 0
+  interactionRange: 2
+  highlightMaterial: {fileID: 0}
+  interactionIndicator: {fileID: 0}
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  evidenceItem:
+    itemID: test_evidence_001
+    itemName: Evidence_Test
+    description: A stange glowing sphere found at the crime scene.
+    icon: {fileID: 0}
+    itemPrefab: {fileID: 2108159436}
+    isEvidence: 1
+    isQuestItem: 0
+  autoDestroy: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

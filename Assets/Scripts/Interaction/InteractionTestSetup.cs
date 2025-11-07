@@ -22,7 +22,7 @@ namespace NotAllNeighbours.Interaction
             if (mainCamera == null)
             {
                 GameObject camObj = new GameObject("Main Camera");
-                mainCamera = camObj.AddComponent<Camera>();
+                mainCamera = camObj.AddComponent<UnityEngine.Camera>();
                 camObj.tag = "MainCamera";
             }
             

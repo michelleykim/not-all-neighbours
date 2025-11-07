@@ -5,6 +5,7 @@ namespace NotAllNeighbours.Interaction
 {
     public class InteractionManager : MonoBehaviour
     {
+      
         [Header("References")]
         [SerializeField] private RaycastDetector raycastDetector;
         [SerializeField] private InvestigationZoom investigationZoom;
