@@ -17,7 +17,23 @@ namespace NotAllNeighbours.Interaction
         
         [Header("References")]
         [SerializeField] private RaycastDetector raycastDetector;
-        
+
+        private void Awake()
+        {
+            if (raycastDetector == null)
+            {
+                raycastDetector = FindObjectOfType<RaycastDetector>();
+                if (raycastDetector != null)
+                {
+                    Debug.Log("CursorManager: Auto-found RaycastDetector");
+                }
+                else
+                {
+                    Debug.LogWarning("CursorManager: Could not find RaycastDetector!");
+                }
+            }
+        }
+
         private void Update()
         {
             UpdateCursor();
