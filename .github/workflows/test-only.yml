@@ -30,6 +30,7 @@ jobs:
         with:
           targetPlatform: StandaloneWindows64
           unityVersion: 6000.2.10f1
+          customParameters: -ScriptingBackend IL2CPP
           # Don't upload, just verify it builds
 
       - name: Report Success
