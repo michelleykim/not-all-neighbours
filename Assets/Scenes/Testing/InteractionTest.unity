@@ -872,6 +872,56 @@ MonoBehaviour:
   documentText: 
   documentImage: {fileID: 0}
   addToJournal: 1
+--- !u!1 &869241638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 869241640}
+  - component: {fileID: 869241639}
+  m_Layer: 7
+  m_Name: InteractionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &869241639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869241638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 353b8704acba9214484e9deb14a39d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.InteractionManager
+  raycastDetector: {fileID: 961739755}
+  investigationZoom: {fileID: 961739756}
+  interactAction: {fileID: -8222095524783560120, guid: 817af096757aed34ca60e1a88b183dae, type: 3}
+  alternateInteractAction: {fileID: -6515454041129481974, guid: 817af096757aed34ca60e1a88b183dae, type: 3}
+  useFallbackInput: 1
+  enableInteraction: 1
+--- !u!4 &869241640
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869241638}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.53309, y: 0.1, z: 3.00516}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,7 +1843,7 @@ Transform:
   m_GameObject: {fileID: 2108159436}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.782, y: 0.1, z: 3.26}
+  m_LocalPosition: {x: -1.782, y: 0.35, z: 3.26}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1855,3 +1905,4 @@ SceneRoots:
   - {fileID: 1669581625}
   - {fileID: 1757719304}
   - {fileID: 125631239}
+  - {fileID: 869241640}

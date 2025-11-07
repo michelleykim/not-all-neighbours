@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections;
 
 namespace NotAllNeighbours.Interaction
@@ -105,18 +106,41 @@ namespace NotAllNeighbours.Interaction
         
         private void HandleZoomInput()
         {
+            var keyboard = Keyboard.current;
+
+            var mouse = Mouse.current;
+
+ 
+
+            if (keyboard == null || mouse == null) return;
+
+ 
+
             // Exit zoom with ESC or right-click
-            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
+
+            if (keyboard.escapeKey.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame)
+
             {
+
                 ExitZoom();
+
                 return;
+
             }
-            
+
+ 
+
             // Rotate object with mouse drag
-            if (allowRotation && Input.GetMouseButton(0))
+
+            if (allowRotation && mouse.leftButton.isPressed)
+
             {
-                float rotationX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
-                float rotationY = Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+
+                Vector2 mouseDelta = mouse.delta.ReadValue();
+
+                float rotationX = mouseDelta.x * rotationSpeed * Time.deltaTime;
+
+                float rotationY = mouseDelta.y * rotationSpeed * Time.deltaTime;
                 
                 if (currentInspectedObject != null)
                 {
