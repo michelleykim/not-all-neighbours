@@ -96,9 +96,9 @@ namespace NotAllNeighbours.Dialogue
       currentDialogue = dialogueNode;
       isDialogueActive = true;
 
-      if (dialoguePanel != null)
+      if (dialogueUI != null)
       {
-        dialoguePanel.SetActive(true);
+        dialogueUI.ShowDialoguePanel();
       }
 
       DisplayDialogue(dialogueNode);

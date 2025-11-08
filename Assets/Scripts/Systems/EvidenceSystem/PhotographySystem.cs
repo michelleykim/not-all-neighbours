@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using NotAllNeighbours.Data.Evidence;
+using NotAllNeighbours.UI.Evidence;
 
 namespace NotAllNeighbours.Evidence
 {
@@ -12,12 +13,11 @@ namespace NotAllNeighbours.Evidence
   /// </summary>
   public class PhotographySystem : MonoBehaviour
   {
-    [Header("UI References")]
-    [SerializeField] private Image flashImage;
-    [SerializeField] private TextMeshProUGUI photoCountText;
-    [SerializeField] private GameObject photoTakenIndicator;
+    [Header("UI Components")]
+    [SerializeField] private PhotoCounterUI photoCounterUI;
 
-    [Header("Flash Settings")]
+    [Header("Flash Effect")]
+    [SerializeField] private Image flashImage;
     [SerializeField] private float flashDuration = 0.3f;
     [SerializeField] private Color flashColor = Color.white;
     [SerializeField] private AnimationCurve flashCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
@@ -26,7 +26,8 @@ namespace NotAllNeighbours.Evidence
     [SerializeField] private AudioSource cameraAudioSource;
     [SerializeField] private AudioClip shutterSound;
 
-    [Header("Feedback")]
+    [Header("Visual Feedback")]
+    [SerializeField] private GameObject photoTakenIndicator;
     [SerializeField] private float indicatorDisplayTime = 2f;
 
     private JournalSystem journalSystem;
@@ -54,6 +55,16 @@ namespace NotAllNeighbours.Evidence
       }
 
       instance = this;
+
+      // Auto-find PhotoCounterUI if not assigned
+      if (photoCounterUI == null)
+      {
+        photoCounterUI = FindObjectOfType<PhotoCounterUI>();
+        if (photoCounterUI == null)
+        {
+          Debug.LogWarning("PhotographySystem: PhotoCounterUI not found! Please assign it in the inspector.");
+        }
+      }
 
       // Initialize flash image
       if (flashImage != null)
@@ -191,13 +202,16 @@ namespace NotAllNeighbours.Evidence
     }
 
     /// <summary>
-    /// Update the photo count UI display
+    /// Update the photo count UI display (delegated to PhotoCounterUI)
     /// </summary>
     private void UpdatePhotoCountUI()
     {
-      if (photoCountText != null && journalSystem != null)
+      if (photoCounterUI != null && journalSystem != null)
       {
-        photoCountText.text = $"Photos: {journalSystem.PhotosToday}/{journalSystem.MaxPhotosPerDay}";
+        photoCounterUI.UpdatePhotoCount(
+            journalSystem.PhotosToday,
+            journalSystem.MaxPhotosPerDay
+        );
       }
     }
 
@@ -229,12 +243,16 @@ namespace NotAllNeighbours.Evidence
     }
 
     /// <summary>
-    /// Show warning when max photos reached
+    /// Show warning when max photos reached (delegated to PhotoCounterUI)
     /// </summary>
     private void ShowMaxPhotosWarning()
     {
       Debug.LogWarning("PhotographySystem: Maximum photos for today reached!");
-      // TODO: Show UI warning message
+
+      if (photoCounterUI != null)
+      {
+        photoCounterUI.ShowMaxPhotosWarning();
+      }
     }
 
     /// <summary>
