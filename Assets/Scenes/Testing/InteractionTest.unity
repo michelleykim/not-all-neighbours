@@ -722,7 +722,7 @@ MonoBehaviour:
   onHoverEnd:
     m_PersistentCalls:
       m_Calls: []
-  targetSceneName: 
+  _targetSceneName: 
   targetSpawnPoint: {fileID: 0}
   isLocked: 0
   requiredKeyID: 
@@ -835,7 +835,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.95, y: 0.35, z: 3.99}
-  m_LocalScale: {x: 1.5, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -903,6 +903,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.InteractionManager
   raycastDetector: {fileID: 961739755}
   investigationZoom: {fileID: 961739756}
+  examineUI: {fileID: 0}
+  sceneTransitionManager: {fileID: 0}
+  photographySystem: {fileID: 0}
+  dialogueManager: {fileID: 0}
   interactAction: {fileID: -8222095524783560120, guid: 817af096757aed34ca60e1a88b183dae, type: 3}
   alternateInteractAction: {fileID: -6515454041129481974, guid: 817af096757aed34ca60e1a88b183dae, type: 3}
   useFallbackInput: 1
