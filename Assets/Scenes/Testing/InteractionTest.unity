@@ -709,9 +709,9 @@ MonoBehaviour:
   interactionType: 6
   interactionPrompt: Examine
   canInteract: 1
-  requiresProximity: 0
+  requiresProximity: 1
   interactionRange: 2
-  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
+  highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
   onInteract:
     m_PersistentCalls:
@@ -742,7 +742,7 @@ GameObject:
   - component: {fileID: 813104614}
   - component: {fileID: 813104618}
   m_Layer: 7
-  m_Name: Examine_Test
+  m_Name: Investigate_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -853,11 +853,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.ExaminableDocument
   interactionType: 4
-  interactionPrompt: Examine
+  interactionPrompt: Look closer
   canInteract: 1
-  requiresProximity: 0
-  interactionRange: 2
-  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
+  requiresProximity: 1
+  interactionRange: 7
+  highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
   onInteract:
     m_PersistentCalls:
@@ -1275,7 +1275,7 @@ GameObject:
   - component: {fileID: 1305563824}
   - component: {fileID: 1305563828}
   m_Layer: 7
-  m_Name: Interactable_Test
+  m_Name: Examine_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1388,9 +1388,9 @@ MonoBehaviour:
   interactionType: 0
   interactionPrompt: Examine this bed
   canInteract: 1
-  requiresProximity: 0
-  interactionRange: 2
-  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
+  requiresProximity: 1
+  interactionRange: 4
+  highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
   onInteract:
     m_PersistentCalls:
@@ -1544,7 +1544,7 @@ MonoBehaviour:
   positionName: Bed Investigation
   positionDescription: A viewpoint for investigation
   positionIndex: 1
-  defaultRotationEuler: {x: 0, y: 45, z: 0}
+  defaultRotationEuler: {x: 18.3, y: 45, z: 0}
   fieldOfView: 60
   minVerticalAngle: -60
   maxVerticalAngle: 60
@@ -1737,6 +1737,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2094451325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2094451327}
+  - component: {fileID: 2094451326}
+  m_Layer: 0
+  m_Name: CursorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2094451326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094451325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f61fbff9a13537418f79febca247417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Interaction.CursorManager
+  defaultCursor: {fileID: 2800000, guid: 46c5efb8dc53b8545b194016271e7e96, type: 3}
+  examineCursor: {fileID: 2800000, guid: 7aa3f81a06ffac449ae49307418c9688, type: 3}
+  collectCursor: {fileID: 2800000, guid: 860ced696ed25074ebc0e25911c7a0a5, type: 3}
+  talkCursor: {fileID: 2800000, guid: 7655ff6afca07ef4ab03aed98e347f35, type: 3}
+  doorCursor: {fileID: 2800000, guid: 7a5ad25188ca9474bb31b3d7f8df8b93, type: 3}
+  useCursor: {fileID: 2800000, guid: 7a5ad25188ca9474bb31b3d7f8df8b93, type: 3}
+  cursorHotspot: {x: 0, y: 0}
+  raycastDetector: {fileID: 961739755}
+--- !u!4 &2094451327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094451325}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.2572, y: 0.1, z: 2.25238}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2108159436
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,9 +1916,9 @@ MonoBehaviour:
   interactionType: 1
   interactionPrompt: Examine
   canInteract: 1
-  requiresProximity: 0
+  requiresProximity: 1
   interactionRange: 2
-  highlightMaterial: {fileID: 2100000, guid: b96cdcbc0b0d172468b92787649904d5, type: 2}
+  highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
   onInteract:
     m_PersistentCalls:
@@ -1906,3 +1958,4 @@ SceneRoots:
   - {fileID: 1757719304}
   - {fileID: 125631239}
   - {fileID: 869241640}
+  - {fileID: 2094451327}
