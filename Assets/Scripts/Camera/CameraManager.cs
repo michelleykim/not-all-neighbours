@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NotAllNeighbours.Interaction;
 
 namespace NotAllNeighbours.Camera
 {
@@ -17,6 +18,9 @@ namespace NotAllNeighbours.Camera
         [Header("Camera References")]
         [Tooltip("Main camera component (auto-assigned if null)")]
         [SerializeField] private UnityEngine.Camera mainCamera;
+
+        [Tooltip("Investigation zoom component (optional, prevents position switching when zoomed)")]
+        [SerializeField] private InvestigationZoom investigationZoom;
 
         [Header("Input Actions")]
         [Tooltip("Input Actions asset for camera controls")]
@@ -91,6 +95,12 @@ namespace NotAllNeighbours.Camera
             if (mainCamera == null)
             {
                 mainCamera = GetComponent<UnityEngine.Camera>();
+            }
+
+            // Auto-find InvestigationZoom if not assigned
+            if (investigationZoom == null)
+            {
+                investigationZoom = FindObjectOfType<InvestigationZoom>();
             }
 
             // Set up Input Actions
@@ -300,6 +310,16 @@ namespace NotAllNeighbours.Camera
         {
             if (isTransitioning || cameraPositions.Count == 0) return;
 
+            // Prevent switching while zoomed in during investigation
+            if (investigationZoom != null && investigationZoom.IsZoomed())
+            {
+                if (debugMode)
+                {
+                    Debug.Log("[CameraManager] Cannot switch positions while zoomed in");
+                }
+                return;
+            }
+
             int nextIndex = (currentPositionIndex + 1) % cameraPositions.Count;
             SwitchToPosition(nextIndex);
         }
@@ -310,6 +330,16 @@ namespace NotAllNeighbours.Camera
         public void SwitchToPreviousPosition()
         {
             if (isTransitioning || cameraPositions.Count == 0) return;
+
+            // Prevent switching while zoomed in during investigation
+            if (investigationZoom != null && investigationZoom.IsZoomed())
+            {
+                if (debugMode)
+                {
+                    Debug.Log("[CameraManager] Cannot switch positions while zoomed in");
+                }
+                return;
+            }
 
             int prevIndex = currentPositionIndex - 1;
             if (prevIndex < 0) prevIndex = cameraPositions.Count - 1;
@@ -322,6 +352,17 @@ namespace NotAllNeighbours.Camera
         public void SwitchToPosition(int index)
         {
             if (isTransitioning) return;
+
+            // Prevent switching while zoomed in during investigation
+            if (investigationZoom != null && investigationZoom.IsZoomed())
+            {
+                if (debugMode)
+                {
+                    Debug.Log("[CameraManager] Cannot switch positions while zoomed in");
+                }
+                return;
+            }
+
             if (index < 0 || index >= cameraPositions.Count)
             {
                 Debug.LogWarning($"[CameraManager] Invalid position index: {index}");
