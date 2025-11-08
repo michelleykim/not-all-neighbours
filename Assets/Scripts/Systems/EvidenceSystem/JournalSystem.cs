@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using NotAllNeighbours.Data.Evidence;
+using NotAllNeighbours.UI.Evidence;
 
 namespace NotAllNeighbours.Evidence
 {
@@ -11,9 +12,13 @@ namespace NotAllNeighbours.Evidence
   /// </summary>
   public class JournalSystem : MonoBehaviour
   {
+    [Header("UI Components")]
+    [SerializeField] private JournalUI journalUI;
+
     [Header("Settings")]
     [SerializeField] private int maxPhotosPerDay = 5;
     [SerializeField] private int currentDay = 1;
+    [SerializeField] private int totalEvidencePieces = 30; // Per killer, from GDD
 
     [Header("Current Session")]
     [SerializeField] private List<JournalEntry> todaysPhotos = new List<JournalEntry>();
@@ -53,6 +58,16 @@ namespace NotAllNeighbours.Evidence
       }
 
       instance = this;
+
+      // Auto-find JournalUI if not assigned
+      if (journalUI == null)
+      {
+        journalUI = FindObjectOfType<JournalUI>();
+        if (journalUI == null)
+        {
+          Debug.LogWarning("JournalSystem: JournalUI not found! Please assign it in the inspector.");
+        }
+      }
     }
 
     /// <summary>
@@ -175,6 +190,32 @@ namespace NotAllNeighbours.Evidence
     public bool HasPhotographedToday(string objectName)
     {
       return todaysPhotos.Exists(e => e.objectName == objectName);
+    }
+
+    /// <summary>
+    /// Open journal UI to view evidence
+    /// </summary>
+    public void OpenJournal()
+    {
+      if (journalUI != null)
+      {
+        journalUI.OpenJournal(GetAllValidEvidence(), totalEvidencePieces);
+      }
+      else
+      {
+        Debug.LogWarning("JournalSystem: Cannot open journal - JournalUI is null");
+      }
+    }
+
+    /// <summary>
+    /// Close journal UI
+    /// </summary>
+    public void CloseJournal()
+    {
+      if (journalUI != null)
+      {
+        journalUI.CloseJournal();
+      }
     }
 
     /// <summary>

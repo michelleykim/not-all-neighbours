@@ -4,6 +4,8 @@ using TMPro;
 using System;
 using System.Collections.Generic;
 using NotAllNeighbours.Data.Dialogue;
+using NotAllNeighbours.UI.Dialogue;
+using NotAllNeighbours.UI.Stats;
 
 namespace NotAllNeighbours.Dialogue
 {
@@ -12,20 +14,13 @@ namespace NotAllNeighbours.Dialogue
   /// </summary>
   public class DialogueManager : MonoBehaviour
   {
-    [Header("UI References")]
-    [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private TextMeshProUGUI speakerNameText;
-    [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private Transform optionsContainer;
-    [SerializeField] private GameObject optionButtonPrefab;
+    [Header("UI Components")]
+    [SerializeField] private DialogueUI dialogueUI;
+    [SerializeField] private StatsDisplayUI statsDisplayUI;
 
     [Header("Stats")]
     [SerializeField] private float currentSanity = 100f;
     [SerializeField] private float currentClarity = 100f;
-
-    [Header("UI Feedback")]
-    [SerializeField] private TextMeshProUGUI sanityText;
-    [SerializeField] private TextMeshProUGUI clarityText;
 
     // Events
     public event Action<float> OnSanityChanged;
@@ -35,7 +30,6 @@ namespace NotAllNeighbours.Dialogue
 
     private DialogueNode currentDialogue;
     private bool isDialogueActive = false;
-    private List<GameObject> currentOptionButtons = new List<GameObject>();
 
     private static DialogueManager instance;
 
@@ -65,11 +59,26 @@ namespace NotAllNeighbours.Dialogue
 
       instance = this;
 
-      if (dialoguePanel != null)
+      // Auto-find UI components if not assigned
+      if (dialogueUI == null)
       {
-        dialoguePanel.SetActive(false);
+        dialogueUI = FindObjectOfType<DialogueUI>();
+        if (dialogueUI == null)
+        {
+          Debug.LogWarning("DialogueManager: DialogueUI not found! Please assign it in the inspector.");
+        }
       }
 
+      if (statsDisplayUI == null)
+      {
+        statsDisplayUI = FindObjectOfType<StatsDisplayUI>();
+        if (statsDisplayUI == null)
+        {
+          Debug.LogWarning("DialogueManager: StatsDisplayUI not found! Please assign it in the inspector.");
+        }
+      }
+
+      // Initialize stats display
       UpdateStatsUI();
     }
 
@@ -101,64 +110,23 @@ namespace NotAllNeighbours.Dialogue
     /// </summary>
     private void DisplayDialogue(DialogueNode node)
     {
-      // Set speaker name
-      if (speakerNameText != null)
+      if (dialogueUI == null)
       {
-        speakerNameText.text = node.speakerName;
-      }
-
-      // Set dialogue text
-      if (dialogueText != null)
-      {
-        dialogueText.text = node.dialogueText;
-      }
-
-      // Clear previous options
-      ClearOptions();
-
-      // Create option buttons
-      foreach (var option in node.options)
-      {
-        // Check if option is available based on Sanity/Clarity
-        bool isAvailable = option.MeetsRequirements(currentSanity, currentClarity);
-        CreateOptionButton(option, isAvailable);
-      }
-    }
-
-    /// <summary>
-    /// Create a dialogue option button
-    /// </summary>
-    private void CreateOptionButton(DialogueOption option, bool isAvailable)
-    {
-      if (optionButtonPrefab == null || optionsContainer == null)
-      {
-        Debug.LogWarning("DialogueManager: Option button prefab or container not assigned");
+        Debug.LogError("DialogueManager: Cannot display dialogue - DialogueUI is null");
         return;
       }
 
-      GameObject buttonObj = Instantiate(optionButtonPrefab, optionsContainer);
-      currentOptionButtons.Add(buttonObj);
+      // Set speaker name and dialogue text
+      dialogueUI.SetSpeakerName(node.speakerName);
+      dialogueUI.SetDialogueText(node.dialogueText);
 
-      Button button = buttonObj.GetComponent<Button>();
-      TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-
-      if (buttonText != null)
-      {
-        buttonText.text = option.optionText;
-
-        // Visual feedback for unavailable options
-        if (!isAvailable)
-        {
-          buttonText.text += " [Locked]";
-          buttonText.color = Color.gray;
-        }
-      }
-
-      if (button != null)
-      {
-        button.interactable = isAvailable;
-        button.onClick.AddListener(() => OnOptionSelected(option));
-      }
+      // Display options with current stats for requirement checking
+      dialogueUI.DisplayOptions(
+          node.options,
+          OnOptionSelected,
+          currentSanity,
+          currentClarity
+      );
     }
 
     /// <summary>
@@ -171,12 +139,9 @@ namespace NotAllNeighbours.Dialogue
       ModifyClarity(option.clarityChange);
 
       // Show NPC response
-      if (!string.IsNullOrEmpty(option.responseText))
+      if (!string.IsNullOrEmpty(option.responseText) && dialogueUI != null)
       {
-        if (dialogueText != null)
-        {
-          dialogueText.text = option.responseText;
-        }
+        dialogueUI.SetDialogueText(option.responseText);
       }
 
       // Handle gaslighting effects
@@ -208,29 +173,17 @@ namespace NotAllNeighbours.Dialogue
     }
 
     /// <summary>
-    /// Clear all dialogue options
-    /// </summary>
-    private void ClearOptions()
-    {
-      foreach (var button in currentOptionButtons)
-      {
-        Destroy(button);
-      }
-      currentOptionButtons.Clear();
-    }
-
-    /// <summary>
     /// End the current dialogue
     /// </summary>
     public void EndDialogue()
     {
       isDialogueActive = false;
       currentDialogue = null;
-      ClearOptions();
 
-      if (dialoguePanel != null)
+      if (dialogueUI != null)
       {
-        dialoguePanel.SetActive(false);
+        dialogueUI.ClearOptions();
+        dialogueUI.HideDialoguePanel();
       }
 
       OnDialogueEnded?.Invoke();
@@ -259,18 +212,14 @@ namespace NotAllNeighbours.Dialogue
     }
 
     /// <summary>
-    /// Update stats UI display
+    /// Update stats UI display (delegated to StatsDisplayUI)
     /// </summary>
     private void UpdateStatsUI()
     {
-      if (sanityText != null)
+      if (statsDisplayUI != null)
       {
-        sanityText.text = $"Sanity: {currentSanity:F0}";
-      }
-
-      if (clarityText != null)
-      {
-        clarityText.text = $"Clarity: {currentClarity:F0}";
+        statsDisplayUI.UpdateSanity(currentSanity);
+        statsDisplayUI.UpdateClarity(currentClarity);
       }
     }
 
