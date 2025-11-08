@@ -7,7 +7,10 @@ namespace NotAllNeighbours.Interaction
     public class InteractableObject : MonoBehaviour, IInteractable
     {
         [Header("Interaction Settings")]
+        [Tooltip("Primary interaction (left-click)")]
         [SerializeField] private InteractionType interactionType;
+        [Tooltip("Secondary interaction (right-click) - set to None if not used")]
+        [SerializeField] private InteractionType secondaryInteractionType = InteractionType.None;
         [SerializeField] private string interactionPrompt = "Examine";
         [SerializeField] private bool canInteract = true;
         [SerializeField] private bool requiresProximity = false;
@@ -46,7 +49,12 @@ namespace NotAllNeighbours.Interaction
         {
             return interactionType;
         }
-        
+
+        public InteractionType GetSecondaryInteractionType()
+        {
+            return secondaryInteractionType;
+        }
+
         public virtual bool CanInteract()
         {
             if (!canInteract) return false;

@@ -6,6 +6,7 @@ namespace NotAllNeighbours.Interaction
     {
         string InteractionPrompt { get; }
         InteractionType GetInteractionType();
+        InteractionType GetSecondaryInteractionType();
         bool CanInteract();
         void OnHoverEnter();
         void OnHoverExit();
@@ -14,8 +15,9 @@ namespace NotAllNeighbours.Interaction
 
     public enum InteractionType
     {
-        Examine,        // Basic inspection
-        Collect,        // Pick up evidence
+        None,          // No interaction
+        Examine,       // Basic inspection
+        Collect,       // Pick up evidence
         Use,           // Interact with object
         Talk,          // Dialogue with NPC
         Investigate,   // Detailed inspection (zoom)

@@ -204,20 +204,58 @@ namespace NotAllNeighbours.Interaction
         
         private void ProcessAlternateInteraction(IInteractable interactable)
         {
-            InteractionType type = interactable.GetInteractionType();
+            // Get secondary interaction type (right-click)
+            InteractionType secondaryType = interactable.GetSecondaryInteractionType();
 
-            // Right-click is specifically for COLLECT (photography)
-            if (type == InteractionType.Collect)
+            // If no secondary interaction is set, fall back to investigation zoom
+            if (secondaryType == InteractionType.None)
             {
-                HandleCollect(interactable);
-            }
-            else
-            {
-                // For other types, right-click can trigger investigation zoom
+                // For objects without secondary interaction, right-click can trigger investigation zoom
                 if (investigationZoom != null)
                 {
                     investigationZoom.ZoomToObject(interactable);
                 }
+                return;
+            }
+
+            // Handle the secondary interaction type
+            switch (secondaryType)
+            {
+                case InteractionType.Examine:
+                    HandleExamine(interactable);
+                    break;
+
+                case InteractionType.Collect:
+                    HandleCollect(interactable);
+                    break;
+
+                case InteractionType.Investigate:
+                    HandleInvestigate(interactable);
+                    break;
+
+                case InteractionType.Talk:
+                    HandleTalk(interactable);
+                    break;
+
+                case InteractionType.Use:
+                    HandleUse(interactable);
+                    break;
+
+                case InteractionType.Document:
+                    HandleDocument(interactable);
+                    break;
+
+                case InteractionType.Door:
+                    HandleDoor(interactable);
+                    break;
+
+                default:
+                    // Default to investigation zoom
+                    if (investigationZoom != null)
+                    {
+                        investigationZoom.ZoomToObject(interactable);
+                    }
+                    break;
             }
         }
         
