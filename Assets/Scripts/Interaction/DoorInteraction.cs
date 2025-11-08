@@ -5,16 +5,18 @@ namespace NotAllNeighbours.Interaction
     public class DoorInteraction : InteractableObject
     {
         [Header("Door Settings")]
-        [SerializeField] private string targetSceneName;
+        [SerializeField] private string _targetSceneName;
         [SerializeField] private Transform targetSpawnPoint;
         [SerializeField] private bool isLocked = false;
         [SerializeField] private string requiredKeyID;
-        
+
         [Header("Animation")]
         [SerializeField] private Animator doorAnimator;
         [SerializeField] private string openTrigger = "Open";
-        
+
         private InventorySystem inventorySystem;
+
+        public string targetSceneName => _targetSceneName;
         
         protected override void Awake()
         {
@@ -54,7 +56,7 @@ namespace NotAllNeighbours.Interaction
             }
             
             // TODO: Integrate with scene transition system (Phase 1 Week 9-10)
-            Debug.Log($"Opening door to: {targetSceneName}");
+            Debug.Log($"Opening door to: {_targetSceneName}");
             
             base.OnInteract();
         }
