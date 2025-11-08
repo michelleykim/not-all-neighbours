@@ -14,9 +14,15 @@ namespace NotAllNeighbours.Interaction
         [SerializeField] private Animator doorAnimator;
         [SerializeField] private string openTrigger = "Open";
 
+        [Header("Evidence Settings (if secondary type is Collect)")]
+        [SerializeField] private bool isValidEvidence = false;
+        [SerializeField] private string evidenceDescription = "A suspicious door";
+
         private InventorySystem inventorySystem;
 
         public string targetSceneName => _targetSceneName;
+        public bool IsValidEvidence => isValidEvidence;
+        public string EvidenceDescription => evidenceDescription;
         
         protected override void Awake()
         {

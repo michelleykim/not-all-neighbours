@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NotAllNeighbours.Interaction;
 
-
-
 namespace NotAllNeighbours.Camera
 
 {
@@ -105,21 +103,97 @@ namespace NotAllNeighbours.Camera
     #region Initialization
     private void Awake()
     {
-      // Auto-assign camera if not set
-      if (mainCamera == null)
-      {
-        mainCamera = GetComponent<UnityEngine.Camera>();
-      }
+        [Header("Camera References")]
+        [Tooltip("Main camera component (auto-assigned if null)")]
+        [SerializeField] private UnityEngine.Camera mainCamera;
 
-      // Auto-find InvestigationZoom if not assigned
-      if (investigationZoom == null)
-      {
-        investigationZoom = FindObjectOfType<InvestigationZoom>();
-      }
+        [Tooltip("Investigation zoom component (optional, prevents position switching when zoomed)")]
+        [SerializeField] private InvestigationZoom investigationZoom;
 
-      // Set up Input Actions
-      SetupInputActions();
-    }
+        [Header("Input Actions")]
+        [Tooltip("Input Actions asset for camera controls")]
+        [SerializeField] private InputActionAsset inputActions;
+
+        [Header("Camera Positions")]
+        [Tooltip("All available camera positions in this room")]
+        [SerializeField] private List<CameraPosition> cameraPositions = new List<CameraPosition>();
+        
+        [Tooltip("Starting camera position index")]
+        [SerializeField] private int startingPositionIndex = 0;
+
+        [Header("Transition Settings")]
+        [Tooltip("Speed of camera transitions between positions (seconds)")]
+        [Range(0.1f, 2f)]
+        [SerializeField] private float transitionSpeed = 0.4f;
+        
+        [Tooltip("Animation curve for smooth transitions")]
+        [SerializeField] private AnimationCurve transitionCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+        [Header("Rotation Settings")]
+        [Tooltip("Enable/disable camera rotation at current position")]
+        [SerializeField] private bool allowRotation = true;
+        
+        [Tooltip("Mouse rotation sensitivity")]
+        [SerializeField] private Vector2 mouseSensitivity = new Vector2(3f, 2f);
+        
+        [Tooltip("Smooth rotation damping")]
+        [Range(0f, 0.3f)]
+        [SerializeField] private float rotationSmoothing = 0.1f;
+        
+        [Tooltip("Invert vertical mouse axis")]
+        [SerializeField] private bool invertVerticalAxis = false;
+
+        [Header("Debug")]
+        [Tooltip("Show debug information in console")]
+        [SerializeField] private bool debugMode = false;
+        
+        [Tooltip("Show gizmos in scene view")]
+        [SerializeField] private bool showGizmos = true;
+
+        // Input Actions
+        private InputAction nextPositionAction;
+        private InputAction previousPositionAction;
+        private InputAction lookAction;
+
+        // Internal state
+        private int currentPositionIndex = 0;
+        private bool isTransitioning = false;
+        private float currentHorizontalRotation = 0f;
+        private float currentVerticalRotation = 0f;
+        private float targetHorizontalRotation = 0f;
+        private float targetVerticalRotation = 0f;
+        private Vector2 rotationVelocity = Vector2.zero;
+
+        // Events
+        public delegate void CameraPositionChanged(CameraPosition newPosition, CameraPosition oldPosition);
+        public event CameraPositionChanged OnCameraPositionChanged;
+
+        #region Properties
+        public CameraPosition CurrentPosition => GetCurrentPosition();
+        public int CurrentPositionIndex => currentPositionIndex;
+        public bool IsTransitioning => isTransitioning;
+        public bool RotationEnabled => allowRotation;
+        public int TotalPositions => cameraPositions.Count;
+        #endregion
+
+        #region Initialization
+        private void Awake()
+        {
+            // Auto-assign camera if not set
+            if (mainCamera == null)
+            {
+                mainCamera = GetComponent<UnityEngine.Camera>();
+            }
+
+            // Auto-find InvestigationZoom if not assigned
+            if (investigationZoom == null)
+            {
+                investigationZoom = FindObjectOfType<InvestigationZoom>();
+            }
+
+            // Set up Input Actions
+            SetupInputActions();
+        }
 
     private void OnEnable()
     {
@@ -262,6 +336,19 @@ namespace NotAllNeighbours.Camera
     {
       if (isTransitioning) return;
 
+            // Prevent switching while zoomed in during investigation
+            if (investigationZoom != null && investigationZoom.IsZoomed())
+            {
+                if (debugMode)
+                {
+                    Debug.Log("[CameraManager] Cannot switch positions while zoomed in");
+                }
+                return;
+            }
+
+            int nextIndex = (currentPositionIndex + 1) % cameraPositions.Count;
+            SwitchToPosition(nextIndex);
+        }
       HandleRotation();
     }
 
@@ -316,6 +403,20 @@ namespace NotAllNeighbours.Camera
     }
     #endregion
 
+            // Prevent switching while zoomed in during investigation
+            if (investigationZoom != null && investigationZoom.IsZoomed())
+            {
+                if (debugMode)
+                {
+                    Debug.Log("[CameraManager] Cannot switch positions while zoomed in");
+                }
+                return;
+            }
+
+            int prevIndex = currentPositionIndex - 1;
+            if (prevIndex < 0) prevIndex = cameraPositions.Count - 1;
+            SwitchToPosition(prevIndex);
+        }
     #region Position Switching
     /// <summary>
     /// Switch to the next camera position in sequence
@@ -329,7 +430,34 @@ namespace NotAllNeighbours.Camera
       {
         if (debugMode)
         {
-          Debug.Log("[CameraManager] Cannot switch positions while zoomed in");
+            if (isTransitioning) return;
+
+            // Prevent switching while zoomed in during investigation
+            if (investigationZoom != null && investigationZoom.IsZoomed())
+            {
+                if (debugMode)
+                {
+                    Debug.Log("[CameraManager] Cannot switch positions while zoomed in");
+                }
+                return;
+            }
+
+            if (index < 0 || index >= cameraPositions.Count)
+            {
+                Debug.LogWarning($"[CameraManager] Invalid position index: {index}");
+                return;
+            }
+            if (index == currentPositionIndex) return;
+
+            CameraPosition oldPosition = GetCurrentPosition();
+            CameraPosition newPosition = cameraPositions[index];
+
+            if (debugMode)
+            {
+                Debug.Log($"[CameraManager] Switching from '{oldPosition?.PositionName}' to '{newPosition.PositionName}'");
+            }
+
+            StartCoroutine(TransitionToPosition(newPosition, oldPosition, index));
         }
         return;
       }

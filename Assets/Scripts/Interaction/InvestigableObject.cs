@@ -19,12 +19,16 @@ namespace NotAllNeighbours.Interaction
         [Header("Zoom Settings")]
         [SerializeField] private float customZoomDistance = 1.5f;
 
+        [Header("Evidence Settings (if secondary type is Collect)")]
+        [SerializeField] private bool isValidEvidence = false;
+
         private bool hasBeenInvestigated = false;
         private GameObject revealedItem;
 
         public bool RequiresZoomForPhotography => requiresZoomForPhotography;
         public bool HasBeenInvestigated => hasBeenInvestigated;
         public float ZoomDistance => customZoomDistance;
+        public bool IsValidEvidence => isValidEvidence;
 
         public override void OnInteract()
         {

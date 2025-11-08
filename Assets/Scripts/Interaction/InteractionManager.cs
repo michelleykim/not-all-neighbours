@@ -204,20 +204,58 @@ namespace NotAllNeighbours.Interaction
         
         private void ProcessAlternateInteraction(IInteractable interactable)
         {
-            InteractionType type = interactable.GetInteractionType();
+            // Get secondary interaction type (right-click)
+            InteractionType secondaryType = interactable.GetSecondaryInteractionType();
 
-            // Right-click is specifically for COLLECT (photography)
-            if (type == InteractionType.Collect)
+            // If no secondary interaction is set, fall back to investigation zoom
+            if (secondaryType == InteractionType.None)
             {
-                HandleCollect(interactable);
-            }
-            else
-            {
-                // For other types, right-click can trigger investigation zoom
+                // For objects without secondary interaction, right-click can trigger investigation zoom
                 if (investigationZoom != null)
                 {
                     investigationZoom.ZoomToObject(interactable);
                 }
+                return;
+            }
+
+            // Handle the secondary interaction type
+            switch (secondaryType)
+            {
+                case InteractionType.Examine:
+                    HandleExamine(interactable);
+                    break;
+
+                case InteractionType.Collect:
+                    HandleCollect(interactable);
+                    break;
+
+                case InteractionType.Investigate:
+                    HandleInvestigate(interactable);
+                    break;
+
+                case InteractionType.Talk:
+                    HandleTalk(interactable);
+                    break;
+
+                case InteractionType.Use:
+                    HandleUse(interactable);
+                    break;
+
+                case InteractionType.Document:
+                    HandleDocument(interactable);
+                    break;
+
+                case InteractionType.Door:
+                    HandleDoor(interactable);
+                    break;
+
+                default:
+                    // Default to investigation zoom
+                    if (investigationZoom != null)
+                    {
+                        investigationZoom.ZoomToObject(interactable);
+                    }
+                    break;
             }
         }
         
@@ -248,6 +286,7 @@ namespace NotAllNeighbours.Interaction
                     string objectName = interactableMono.gameObject.name;
                     string description = interactable.InteractionPrompt;
                     bool isValidEvidence = false;
+                    bool isZoomedIn = investigationZoom != null && investigationZoom.IsZoomed();
 
                     // Check for CollectableObject component first
                     var collectableObj = interactableMono.GetComponent<CollectableObject>();
@@ -257,21 +296,42 @@ namespace NotAllNeighbours.Interaction
                         description = collectableObj.GetEvidenceDescription();
 
                         // Check if can be photographed when zoomed
-                        bool isZoomedIn = investigationZoom != null && investigationZoom.IsZoomed();
                         if (!collectableObj.CanPhotograph(isZoomedIn))
                         {
                             Debug.Log("This evidence can only be photographed when zoomed in");
                             return;
                         }
                     }
-                    // Fallback to EvidenceObject for backwards compatibility
-                    else
+                    // Check for DoorInteraction (door that can be photographed)
+                    else if (interactableMono.TryGetComponent<DoorInteraction>(out var doorInteraction))
                     {
-                        var evidenceObj = interactableMono.GetComponent<EvidenceObject>();
-                        if (evidenceObj != null)
+                        isValidEvidence = doorInteraction.IsValidEvidence;
+                        description = doorInteraction.EvidenceDescription;
+                    }
+                    // Check for ExaminableObject
+                    else if (interactableMono.TryGetComponent<ExaminableObject>(out var examinableObj))
+                    {
+                        // Examinable objects can be photographed with their examination text as description
+                        description = examinableObj.InteractionPrompt;
+                        isValidEvidence = examinableObj.IsValidEvidence;
+                    }
+                    // Check for InvestigableObject
+                    else if (interactableMono.TryGetComponent<InvestigableObject>(out var investigableObj))
+                    {
+                        description = investigableObj.GetInvestigationDescription();
+                        isValidEvidence = investigableObj.IsValidEvidence;
+
+                        // Check if requires zoom for photography
+                        if (investigableObj.RequiresZoomForPhotography && !isZoomedIn)
                         {
-                            isValidEvidence = true;
+                            Debug.Log("This evidence can only be photographed when zoomed in");
+                            return;
                         }
+                    }
+                    // Fallback to EvidenceObject for backwards compatibility
+                    else if (interactableMono.TryGetComponent<EvidenceObject>(out var evidenceObj))
+                    {
+                        isValidEvidence = true;
                     }
 
                     photographySystem.TakePhoto(objectName, description, isValidEvidence);
