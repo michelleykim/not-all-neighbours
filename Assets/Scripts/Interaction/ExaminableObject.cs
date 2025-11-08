@@ -13,7 +13,12 @@ namespace NotAllNeighbours.Interaction
         [SerializeField] private bool changeTextAfterFirstExamine = false;
         [SerializeField] private string subsequentExaminationText = "";
 
+        [Header("Evidence Settings (if secondary type is Collect)")]
+        [SerializeField] private bool isValidEvidence = false;
+
         private bool hasBeenExamined = false;
+
+        public bool IsValidEvidence => isValidEvidence;
 
         /// <summary>
         /// Override InteractionPrompt to return examination text
