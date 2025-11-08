@@ -4,6 +4,7 @@ using NotAllNeighbours.UI;
 using NotAllNeighbours.Managers;
 using NotAllNeighbours.Evidence;
 using NotAllNeighbours.Dialogue;
+using NotAllNeighbours.NPC;
 
 namespace NotAllNeighbours.Interaction
 {
