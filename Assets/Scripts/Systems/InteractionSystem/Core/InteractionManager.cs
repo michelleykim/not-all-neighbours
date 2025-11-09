@@ -198,21 +198,8 @@ namespace NotAllNeighbours.Interaction
 
     private void ProcessAlternateInteraction(IInteractable interactable)
     {
-      InteractionType type = interactable.GetInteractionType();
-
-      // Right-click is specifically for COLLECT (photography)
-      if (type == InteractionType.Collect)
-      {
-        HandleCollect(interactable);
-      }
-      else
-      {
-        // For other types, right-click can trigger investigation zoom
-        if (investigationZoom != null)
-        {
-          investigationZoom.ZoomToObject(interactable);
-        }
-      }
+      // Right-click is now for photography on ALL interactable objects
+      HandleCollect(interactable);
     }
 
     private void HandleExamine(IInteractable interactable)
@@ -238,28 +225,40 @@ namespace NotAllNeighbours.Interaction
         MonoBehaviour interactableMono = interactable as MonoBehaviour;
         if (interactableMono != null)
         {
-          // Get evidence data from the interactable object
+          // Get evidence data from the interactable object (now all InteractableObjects have photography support)
           string objectName = interactableMono.gameObject.name;
           string description = interactable.InteractionPrompt;
           bool isValidEvidence = false;
 
-          // Check for CollectableObject component
-          var collectableObj = interactableMono.GetComponent<CollectableObject>();
-          if (collectableObj != null)
+          // Get InteractableObject component (base class now has photography support)
+          var interactableObj = interactableMono.GetComponent<InteractableObject>();
+          if (interactableObj != null)
           {
-            isValidEvidence = collectableObj.IsValidEvidence;
-            description = collectableObj.GetEvidenceDescription();
+            isValidEvidence = interactableObj.IsValidEvidence;
+            description = interactableObj.GetEvidenceDescription();
 
             // Check if can be photographed when zoomed
             bool isZoomedIn = investigationZoom != null && investigationZoom.IsZoomed();
-            if (!collectableObj.CanPhotograph(isZoomedIn))
+            if (!interactableObj.CanPhotograph(isZoomedIn))
             {
               Debug.Log("This evidence can only be photographed when zoomed in");
               return;
             }
-          }
 
-          photographySystem.TakePhoto(objectName, description, isValidEvidence);
+            // Take the photo
+            bool photoTaken = photographySystem.TakePhoto(objectName, description, isValidEvidence);
+
+            // Mark as photographed if successful
+            if (photoTaken)
+            {
+              interactableObj.MarkAsPhotographed();
+            }
+          }
+          else
+          {
+            // Fallback for non-InteractableObject IInteractables
+            photographySystem.TakePhoto(objectName, description, isValidEvidence);
+          }
         }
       }
       else

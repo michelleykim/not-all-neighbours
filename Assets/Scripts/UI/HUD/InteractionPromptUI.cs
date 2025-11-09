@@ -124,18 +124,19 @@ namespace NotAllNeighbours.UI.Investigation
 
     /// <summary>
     /// Get input hint text based on interaction type
-    /// According to GDD: Left-click for most, Right-click for Collect
+    /// All InteractableObjects support photography (right-click)
+    /// Left-click is for type-specific actions
     /// </summary>
     private string GetInputHint(InteractionType type)
     {
       return type switch
       {
-        InteractionType.Examine => "[Left Click] Examine",
-        InteractionType.Investigate => "[Left Click] Investigate",
-        InteractionType.Door => "[Left Click] Open",
+        InteractionType.Examine => "[Left Click] Examine | [Right Click] Photograph",
+        InteractionType.Investigate => "[Left Click] Investigate | [Right Click] Photograph",
+        InteractionType.Door => "[Left Click] Open | [Right Click] Photograph",
         InteractionType.Collect => "[Right Click] Photograph",
-        InteractionType.Talk => "[Left Click] Talk",
-        _ => "[Left Click] Interact"
+        InteractionType.Talk => "[Left Click] Talk | [Right Click] Photograph",
+        _ => "[Left Click] Interact | [Right Click] Photograph"
       };
     }
 
