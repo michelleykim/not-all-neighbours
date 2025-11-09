@@ -53,8 +53,8 @@ namespace NotAllNeighbours.Interaction
 
             // Wire up InteractionManager references using reflection
             var imType = typeof(InteractionManager);
-            var raycastField = imType.GetField("raycastDetector", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var zoomField = imType.GetField("investigationZoom", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var raycastField = imType.GetField("raycastDetector", global::System.Reflection.BindingFlags.NonPublic | global::System.Reflection.BindingFlags.Instance);
+            var zoomField = imType.GetField("investigationZoom", global::System.Reflection.BindingFlags.NonPublic | global::System.Reflection.BindingFlags.Instance);
 
             if (raycastField != null)
             {
@@ -79,7 +79,7 @@ namespace NotAllNeighbours.Interaction
 
             // Wire up CursorManager reference using reflection
             var cmType = typeof(CursorManager);
-            var cmRaycastField = cmType.GetField("raycastDetector", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var cmRaycastField = cmType.GetField("raycastDetector", global::System.Reflection.BindingFlags.NonPublic | global::System.Reflection.BindingFlags.Instance);
 
             if (cmRaycastField != null)
             {

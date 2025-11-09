@@ -520,7 +520,7 @@ namespace NotAllNeighbours.Camera
     /// </summary>
     public CameraPosition FindPositionByName(string name)
     {
-      return cameraPositions.FirstOrDefault(p => p.PositionName.Equals(name, System.StringComparison.OrdinalIgnoreCase));
+      return cameraPositions.FirstOrDefault(p => p.PositionName.Equals(name, global::System.StringComparison.OrdinalIgnoreCase));
     }
     #endregion
 
