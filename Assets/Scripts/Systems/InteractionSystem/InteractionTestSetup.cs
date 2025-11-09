@@ -27,7 +27,7 @@ namespace NotAllNeighbours.Interaction
             }
 
             // Add RaycastDetector
-            RaycastDetector raycastDetector = FindObjectOfType<RaycastDetector>();
+            RaycastDetector raycastDetector = FindFirstObjectByType<RaycastDetector>();
             if (raycastDetector == null)
             {
                 raycastDetector = mainCamera.gameObject.AddComponent<RaycastDetector>();
@@ -35,7 +35,7 @@ namespace NotAllNeighbours.Interaction
             }
 
             // Add InvestigationZoom
-            InvestigationZoom investigationZoom = FindObjectOfType<InvestigationZoom>();
+            InvestigationZoom investigationZoom = FindFirstObjectByType<InvestigationZoom>();
             if (investigationZoom == null)
             {
                 investigationZoom = mainCamera.gameObject.AddComponent<InvestigationZoom>();
@@ -43,7 +43,7 @@ namespace NotAllNeighbours.Interaction
             }
 
             // Add InteractionManager and wire up references
-            InteractionManager interactionManager = FindObjectOfType<InteractionManager>();
+            InteractionManager interactionManager = FindFirstObjectByType<InteractionManager>();
             if (interactionManager == null)
             {
                 GameObject managerObj = new GameObject("InteractionManager");
@@ -68,17 +68,8 @@ namespace NotAllNeighbours.Interaction
                 Debug.Log("Wired InvestigationZoom to InteractionManager");
             }
 
-            // Add InventorySystem
-            InventorySystem inventorySystem = FindObjectOfType<InventorySystem>();
-            if (inventorySystem == null)
-            {
-                GameObject invObj = new GameObject("InventorySystem");
-                inventorySystem = invObj.AddComponent<InventorySystem>();
-                Debug.Log("Created InventorySystem");
-            }
-
             // Add CursorManager and wire up references
-            CursorManager cursorManager = FindObjectOfType<CursorManager>();
+            CursorManager cursorManager = FindFirstObjectByType<CursorManager>();
             if (cursorManager == null)
             {
                 GameObject cursorObj = new GameObject("CursorManager");

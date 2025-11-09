@@ -37,5 +37,10 @@ namespace NotAllNeighbours.System.InteractionSystem.Interactables
     {
       return documentImage;
     }
+
+    public bool ShouldAddToJournal()
+    {
+      return addToJournal;
+    }
   }
 }

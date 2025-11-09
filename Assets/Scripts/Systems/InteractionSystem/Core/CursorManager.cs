@@ -23,7 +23,7 @@ namespace NotAllNeighbours.Interaction
     {
       if (raycastDetector == null)
       {
-        raycastDetector = FindObjectOfType<RaycastDetector>();
+        raycastDetector = FindFirstObjectByType<RaycastDetector>();
         if (raycastDetector != null)
         {
           Debug.Log("CursorManager: Auto-found RaycastDetector");

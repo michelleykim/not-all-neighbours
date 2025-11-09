@@ -114,7 +114,7 @@ namespace NotAllNeighbours.Camera
       // Auto-find InvestigationZoom if not assigned
       if (investigationZoom == null)
       {
-        investigationZoom = FindObjectOfType<InvestigationZoom>();
+        investigationZoom = FindFirstObjectByType<InvestigationZoom>();
       }
 
       // Set up Input Actions
@@ -228,7 +228,7 @@ namespace NotAllNeighbours.Camera
       if (cameraPositions == null || cameraPositions.Count == 0)
       {
         Debug.LogWarning("[CameraManager] Attempting to auto-find camera positions...");
-        CameraPosition[] foundPositions = FindObjectsOfType<CameraPosition>();
+        CameraPosition[] foundPositions = FindObjectsByType<CameraPosition>(FindObjectsSortMode.None);
         if (foundPositions.Length > 0)
         {
           cameraPositions = foundPositions.OrderBy(p => p.PositionIndex).ToList();

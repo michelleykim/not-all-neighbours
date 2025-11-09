@@ -46,6 +46,9 @@ namespace NotAllNeighbours.UI.Evidence
     private int currentPhotoIndex = 0;
     private int filterDay = -1; // -1 = show all days
 
+    // Public property for accessing page flip duration
+    public float PageFlipDuration => pageFlipDuration;
+
     private void Awake()
     {
       // Get or add components

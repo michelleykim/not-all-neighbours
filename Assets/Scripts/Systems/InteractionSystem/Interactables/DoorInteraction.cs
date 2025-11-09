@@ -18,6 +18,9 @@ namespace NotAllNeighbours.Systems.InteractionSystem.Interactables
     [SerializeField] private bool isLocked = false;
     [SerializeField] private string lockReason = "This door is locked.";
 
+    // Public property to access target scene name
+    public string targetSceneName => _targetSceneName;
+
     [Header("Animation")]
     [SerializeField] private Animator doorAnimator;
     [SerializeField] private string openTrigger = "Open";
@@ -53,7 +56,7 @@ namespace NotAllNeighbours.Systems.InteractionSystem.Interactables
       }
 
       // Scene transition handled by InteractionManager
-      Debug.Log($"Opening door to: {targetSceneName}");
+      Debug.Log($"Opening door to: {_targetSceneName}");
 
       base.OnInteract();
     }
