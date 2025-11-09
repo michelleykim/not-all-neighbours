@@ -96,7 +96,9 @@ namespace NotAllNeighbours.UI.Evidence
     public void OpenJournal(List<JournalEntry> photos, int totalEvidencePieces = 30)
     {
       currentPhotos = new List<JournalEntry>(photos);
-      currentPhotoIndex = 0;
+
+      // Show most recent photo first (last in the list)
+      currentPhotoIndex = currentPhotos.Count > 0 ? currentPhotos.Count - 1 : 0;
       filterDay = -1; // Show all by default
 
       if (journalPanel != null)
@@ -107,6 +109,8 @@ namespace NotAllNeighbours.UI.Evidence
       UpdateEvidenceCounter(photos.Count, totalEvidencePieces);
       PopulateDayFilter();
       DisplayCurrentPhoto();
+
+      Debug.Log($"JournalUI: Opened journal with {photos.Count} photos, showing photo {currentPhotoIndex + 1}");
 
       // Fade in animation
       if (canvasGroup != null)
@@ -120,6 +124,8 @@ namespace NotAllNeighbours.UI.Evidence
     /// </summary>
     public void CloseJournal()
     {
+      Debug.Log("JournalUI: CloseJournal button pressed");
+
       if (canvasGroup != null)
       {
         StartCoroutine(FadeAndClose());
@@ -135,13 +141,20 @@ namespace NotAllNeighbours.UI.Evidence
     /// </summary>
     public void ShowPreviousPhoto()
     {
-      if (currentPhotos.Count == 0) return;
+      if (currentPhotos.Count == 0)
+      {
+        Debug.Log("JournalUI: ShowPreviousPhoto - no photos available");
+        return;
+      }
 
+      int previousIndex = currentPhotoIndex;
       currentPhotoIndex--;
       if (currentPhotoIndex < 0)
       {
         currentPhotoIndex = currentPhotos.Count - 1;
       }
+
+      Debug.Log($"JournalUI: ShowPreviousPhoto - moved from photo {previousIndex + 1} to {currentPhotoIndex + 1}");
 
       PlayPageFlipSound();
       DisplayCurrentPhoto();
@@ -152,13 +165,20 @@ namespace NotAllNeighbours.UI.Evidence
     /// </summary>
     public void ShowNextPhoto()
     {
-      if (currentPhotos.Count == 0) return;
+      if (currentPhotos.Count == 0)
+      {
+        Debug.Log("JournalUI: ShowNextPhoto - no photos available");
+        return;
+      }
 
+      int previousIndex = currentPhotoIndex;
       currentPhotoIndex++;
       if (currentPhotoIndex >= currentPhotos.Count)
       {
         currentPhotoIndex = 0;
       }
+
+      Debug.Log($"JournalUI: ShowNextPhoto - moved from photo {previousIndex + 1} to {currentPhotoIndex + 1}");
 
       PlayPageFlipSound();
       DisplayCurrentPhoto();
@@ -176,6 +196,10 @@ namespace NotAllNeighbours.UI.Evidence
       }
 
       JournalEntry entry = currentPhotos[currentPhotoIndex];
+
+      // Log photo information (placeholder for actual photo display)
+      Debug.Log($"JournalUI: Displaying photo {currentPhotoIndex + 1}/{currentPhotos.Count} - " +
+                $"'{entry.objectName}' (Day {entry.dayTaken}) - {entry.description}");
 
       // Display photo
       if (photoDisplay != null)
@@ -405,6 +429,7 @@ namespace NotAllNeighbours.UI.Evidence
       if (journalPanel != null)
       {
         journalPanel.SetActive(false);
+        Debug.Log("JournalUI: Journal panel closed");
       }
     }
 
