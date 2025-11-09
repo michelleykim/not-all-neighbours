@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using NotAllNeighbours.Systems.InteractionSystem.Interactables;
+using NotAllNeighbours.Interaction;
 
 namespace NotAllNeighbours.Systems.InteractionSystem.Zoom
 {
