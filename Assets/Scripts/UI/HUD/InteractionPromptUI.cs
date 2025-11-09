@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using NotAllNeighbours.Interaction;
-using NotAllNeighbours.Core.Interfaces;
 using NotAllNeighbours.Core.Enums;
 
 namespace NotAllNeighbours.UI.Investigation

@@ -25,12 +25,6 @@ namespace NotAllNeighbours.Systems.InteractionSystem.Interactables
     [SerializeField] private Animator doorAnimator;
     [SerializeField] private string openTrigger = "Open";
 
-    private void Awake()
-    {
-      // Ensure interaction type is set to Door
-      // This is set in InteractableObject, but we ensure it here
-    }
-
     public override bool CanInteract()
     {
       if (!base.CanInteract()) return false;
