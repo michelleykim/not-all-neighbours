@@ -7,6 +7,7 @@ using NotAllNeighbours.Dialogue;
 using NotAllNeighbours.NPC;
 using NotAllNeighbours.Core.Enums;
 using NotAllNeighbours.Systems.InteractionSystem.Interactables;
+using NotAllNeighbours.Systems.InteractionSystem.Zoom;
 
 namespace NotAllNeighbours.Interaction
 {

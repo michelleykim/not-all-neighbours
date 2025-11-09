@@ -724,6 +724,11 @@ MonoBehaviour:
   interactionRange: 7
   highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
+  isValidEvidence: 0
+  evidenceDescription: A potential evidence.
+  canOnlyBePhotographedWhenZoomed: 0
+  photographedIndicator: {fileID: 0}
+  disableAfterPhotograph: 0
   onInteract:
     m_PersistentCalls:
       m_Calls: []
@@ -1086,6 +1091,11 @@ MonoBehaviour:
   interactionRange: 7
   highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
+  isValidEvidence: 0
+  evidenceDescription: A potential evidence.
+  canOnlyBePhotographedWhenZoomed: 0
+  photographedIndicator: {fileID: 0}
+  disableAfterPhotograph: 0
   onInteract:
     m_PersistentCalls:
       m_Calls: []
@@ -1702,6 +1712,11 @@ MonoBehaviour:
   interactionRange: 4
   highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
+  isValidEvidence: 0
+  evidenceDescription: A potential evidence.
+  canOnlyBePhotographedWhenZoomed: 0
+  photographedIndicator: {fileID: 0}
+  disableAfterPhotograph: 0
   onInteract:
     m_PersistentCalls:
       m_Calls: []
@@ -2443,16 +2458,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2108159436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecc7c0f71925eff49b7173f82b0945cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f52177694d2838458e24f2a34c45393, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.Systems.InteractionSystem.Interactables.CollectableObject
-  interactionType: 1
-  interactionPrompt: Collect
+  m_EditorClassIdentifier: Assembly-CSharp::NotAllNeighbours.System.InteractionSystem.Interactables.InvestigableObject
+  interactionType: 2
+  interactionPrompt: Talk?
   canInteract: 1
-  requiresProximity: 1
-  interactionRange: 4
+  requiresProximity: 0
+  interactionRange: 2
   highlightMaterial: {fileID: 0}
   interactionIndicator: {fileID: 0}
+  isValidEvidence: 0
+  evidenceDescription: A potential evidence.
+  canOnlyBePhotographedWhenZoomed: 0
+  photographedIndicator: {fileID: 0}
+  disableAfterPhotograph: 0
   onInteract:
     m_PersistentCalls:
       m_Calls: []
@@ -2462,11 +2482,12 @@ MonoBehaviour:
   onHoverEnd:
     m_PersistentCalls:
       m_Calls: []
-  isValidEvidence: 0
-  evidenceDescription: Potential evidence
-  canOnlyBePhotographedWhenZoomed: 0
-  photographedIndicator: {fileID: 0}
-  disableAfterPhotograph: 0
+  requiresZoomForPhotography: 0
+  investigationDescription: Investigate this closely...
+  revealsHiddenItem: 0
+  hiddenItemPrefab: {fileID: 0}
+  hiddenItemSpawnPoint: {fileID: 0}
+  customZoomDistance: 1.5
 --- !u!114 &2123893327 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2435569153730604265, guid: a303509204d539a47b26cc049bdd9960, type: 3}
