@@ -61,6 +61,14 @@ namespace NotAllNeighbours.UI.Evidence
         }
       }
 
+      // Initialize canvas group with proper settings
+      if (canvasGroup != null)
+      {
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+      }
+
       audioSource = GetComponent<AudioSource>();
       if (audioSource == null)
       {
@@ -102,6 +110,13 @@ namespace NotAllNeighbours.UI.Evidence
       if (journalPanel != null)
       {
         journalPanel.SetActive(true);
+      }
+
+      // Enable canvas group interactions
+      if (canvasGroup != null)
+      {
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
       }
 
       UpdateEvidenceCounter(photos.Count, totalEvidencePieces);
@@ -400,6 +415,13 @@ namespace NotAllNeighbours.UI.Evidence
     /// </summary>
     private global::System.Collections.IEnumerator FadeAndClose()
     {
+      // Disable interactions during fade out
+      if (canvasGroup != null)
+      {
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+      }
+
       yield return FadeCanvasGroup(canvasGroup, 1f, 0f, 0.3f);
 
       if (journalPanel != null)
