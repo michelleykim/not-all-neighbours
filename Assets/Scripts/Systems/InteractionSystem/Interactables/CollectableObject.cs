@@ -1,4 +1,6 @@
 using UnityEngine;
+using NotAllNeighbours.Interaction;
+using NotAllNeighbours.Core.Enums;
 
 namespace NotAllNeighbours.Systems.InteractionSystem.Interactables
 {

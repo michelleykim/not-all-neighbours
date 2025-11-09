@@ -1,5 +1,6 @@
 using UnityEngine;
 using NotAllNeighbours.Core.Enums;
+using NotAllNeighbours.Interaction;
 
 namespace NotAllNeighbours.Systems.InteractionSystem.Interactables
 {

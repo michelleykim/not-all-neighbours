@@ -1,4 +1,5 @@
 using UnityEngine;
+using NotAllNeighbours.Interaction;
 
 namespace NotAllNeighbours.System.InteractionSystem.Interactables
 {

@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
+using System;
 using NotAllNeighbours.Data.Dialogue;
 
 namespace NotAllNeighbours.UI.Dialogue
