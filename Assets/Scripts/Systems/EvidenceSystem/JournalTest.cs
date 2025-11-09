@@ -120,4 +120,34 @@ public class JournalTest : MonoBehaviour
     JournalSystem.Instance.ClearJournal();
     Debug.Log("JournalTest: Journal cleared");
   }
+
+  /// <summary>
+  /// Verify the JournalUI setup to diagnose button issues
+  /// Call this to check if buttons are properly assigned and configured
+  /// </summary>
+  [ContextMenu("Verify JournalUI Setup")]
+  public void VerifyJournalUISetup()
+  {
+    Debug.Log("JournalTest: Verifying JournalUI setup...");
+
+    if (JournalSystem.Instance == null)
+    {
+      Debug.LogError("JournalTest: JournalSystem.Instance is null!");
+      return;
+    }
+
+    // Find JournalUI in the scene
+    NotAllNeighbours.UI.Evidence.JournalUI journalUI = FindFirstObjectByType<NotAllNeighbours.UI.Evidence.JournalUI>();
+
+    if (journalUI == null)
+    {
+      Debug.LogError("JournalTest: Could not find JournalUI in the scene!");
+      return;
+    }
+
+    Debug.Log($"JournalTest: Found JournalUI on GameObject '{journalUI.gameObject.name}'");
+
+    // Call the verification method on JournalUI
+    journalUI.VerifyButtonSetup();
+  }
 }

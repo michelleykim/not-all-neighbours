@@ -51,6 +51,8 @@ namespace NotAllNeighbours.UI.Evidence
 
     private void Awake()
     {
+      Debug.Log("JournalUI: Awake called");
+
       // Get or add components
       if (canvasGroup == null && journalPanel != null)
       {
@@ -58,7 +60,16 @@ namespace NotAllNeighbours.UI.Evidence
         if (canvasGroup == null)
         {
           canvasGroup = journalPanel.AddComponent<CanvasGroup>();
+          Debug.Log("JournalUI: Created new CanvasGroup component");
         }
+      }
+
+      // Ensure CanvasGroup doesn't block raycasts
+      if (canvasGroup != null)
+      {
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
+        Debug.Log($"JournalUI: CanvasGroup configured - blocksRaycasts: {canvasGroup.blocksRaycasts}, interactable: {canvasGroup.interactable}");
       }
 
       audioSource = GetComponent<AudioSource>();
@@ -68,14 +79,37 @@ namespace NotAllNeighbours.UI.Evidence
       }
 
       // Set up button listeners
+      Debug.Log($"JournalUI: Setting up button listeners - previousButton: {previousButton != null}, nextButton: {nextButton != null}, closeButton: {closeButton != null}");
+
       if (previousButton != null)
+      {
         previousButton.onClick.AddListener(ShowPreviousPhoto);
+        Debug.Log("JournalUI: Previous button listener added");
+      }
+      else
+      {
+        Debug.LogWarning("JournalUI: previousButton is null - cannot add listener");
+      }
 
       if (nextButton != null)
+      {
         nextButton.onClick.AddListener(ShowNextPhoto);
+        Debug.Log("JournalUI: Next button listener added");
+      }
+      else
+      {
+        Debug.LogWarning("JournalUI: nextButton is null - cannot add listener");
+      }
 
       if (closeButton != null)
+      {
         closeButton.onClick.AddListener(CloseJournal);
+        Debug.Log("JournalUI: Close button listener added");
+      }
+      else
+      {
+        Debug.LogWarning("JournalUI: closeButton is null - cannot add listener");
+      }
 
       if (showAllDaysToggle != null)
         showAllDaysToggle.onValueChanged.AddListener(OnShowAllDaysToggled);
@@ -87,6 +121,11 @@ namespace NotAllNeighbours.UI.Evidence
       if (journalPanel != null)
       {
         journalPanel.SetActive(false);
+        Debug.Log("JournalUI: Journal panel hidden by default");
+      }
+      else
+      {
+        Debug.LogWarning("JournalUI: journalPanel is null!");
       }
     }
 
@@ -104,6 +143,14 @@ namespace NotAllNeighbours.UI.Evidence
       if (journalPanel != null)
       {
         journalPanel.SetActive(true);
+      }
+
+      // Ensure CanvasGroup allows interaction when journal is open
+      if (canvasGroup != null)
+      {
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+        Debug.Log($"JournalUI: CanvasGroup set to interactable and blocksRaycasts");
       }
 
       UpdateEvidenceCounter(photos.Count, totalEvidencePieces);
@@ -439,6 +486,101 @@ namespace NotAllNeighbours.UI.Evidence
     public bool IsOpen()
     {
       return journalPanel != null && journalPanel.activeSelf;
+    }
+
+    /// <summary>
+    /// Verify button setup and configuration - call this to diagnose button issues
+    /// </summary>
+    [ContextMenu("Verify Button Setup")]
+    public void VerifyButtonSetup()
+    {
+      Debug.Log("=== JournalUI Button Verification ===");
+
+      // Check journal panel
+      Debug.Log($"journalPanel: {(journalPanel != null ? "Assigned" : "NULL")}");
+      if (journalPanel != null)
+      {
+        Debug.Log($"  - Active: {journalPanel.activeSelf}");
+        Debug.Log($"  - ActiveInHierarchy: {journalPanel.activeInHierarchy}");
+      }
+
+      // Check canvas group
+      Debug.Log($"canvasGroup: {(canvasGroup != null ? "Assigned" : "NULL")}");
+      if (canvasGroup != null)
+      {
+        Debug.Log($"  - alpha: {canvasGroup.alpha}");
+        Debug.Log($"  - interactable: {canvasGroup.interactable}");
+        Debug.Log($"  - blocksRaycasts: {canvasGroup.blocksRaycasts}");
+      }
+
+      // Check buttons
+      Debug.Log($"closeButton: {(closeButton != null ? "Assigned" : "NULL")}");
+      if (closeButton != null)
+      {
+        Debug.Log($"  - GameObject: {closeButton.gameObject.name}");
+        Debug.Log($"  - Active: {closeButton.gameObject.activeInHierarchy}");
+        Debug.Log($"  - Interactable: {closeButton.interactable}");
+        Debug.Log($"  - Listener count: {closeButton.onClick.GetPersistentEventCount()}");
+      }
+
+      Debug.Log($"previousButton: {(previousButton != null ? "Assigned" : "NULL")}");
+      if (previousButton != null)
+      {
+        Debug.Log($"  - GameObject: {previousButton.gameObject.name}");
+        Debug.Log($"  - Active: {previousButton.gameObject.activeInHierarchy}");
+        Debug.Log($"  - Interactable: {previousButton.interactable}");
+        Debug.Log($"  - Listener count: {previousButton.onClick.GetPersistentEventCount()}");
+      }
+
+      Debug.Log($"nextButton: {(nextButton != null ? "Assigned" : "NULL")}");
+      if (nextButton != null)
+      {
+        Debug.Log($"  - GameObject: {nextButton.gameObject.name}");
+        Debug.Log($"  - Active: {nextButton.gameObject.activeInHierarchy}");
+        Debug.Log($"  - Interactable: {nextButton.interactable}");
+        Debug.Log($"  - Listener count: {nextButton.onClick.GetPersistentEventCount()}");
+      }
+
+      // Check for EventSystem
+      UnityEngine.EventSystems.EventSystem eventSystem = UnityEngine.EventSystems.EventSystem.current;
+      Debug.Log($"EventSystem: {(eventSystem != null ? "Found" : "MISSING!")}");
+      if (eventSystem != null)
+      {
+        Debug.Log($"  - Enabled: {eventSystem.enabled}");
+        Debug.Log($"  - GameObject: {eventSystem.gameObject.name}");
+      }
+
+      Debug.Log("=================================");
+    }
+
+    /// <summary>
+    /// Test method to manually trigger close button functionality
+    /// </summary>
+    [ContextMenu("Test Close Button")]
+    public void TestCloseButton()
+    {
+      Debug.Log("JournalUI: TestCloseButton() called manually");
+      CloseJournal();
+    }
+
+    /// <summary>
+    /// Test method to manually trigger previous button functionality
+    /// </summary>
+    [ContextMenu("Test Previous Button")]
+    public void TestPreviousButton()
+    {
+      Debug.Log("JournalUI: TestPreviousButton() called manually");
+      ShowPreviousPhoto();
+    }
+
+    /// <summary>
+    /// Test method to manually trigger next button functionality
+    /// </summary>
+    [ContextMenu("Test Next Button")]
+    public void TestNextButton()
+    {
+      Debug.Log("JournalUI: TestNextButton() called manually");
+      ShowNextPhoto();
     }
   }
 }
