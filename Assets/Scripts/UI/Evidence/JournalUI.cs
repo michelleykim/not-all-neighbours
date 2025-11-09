@@ -46,6 +46,9 @@ namespace NotAllNeighbours.UI.Evidence
     private int currentPhotoIndex = 0;
     private int filterDay = -1; // -1 = show all days
 
+    // Public property for accessing page flip duration
+    public float PageFlipDuration => pageFlipDuration;
+
     private void Awake()
     {
       // Get or add components
@@ -377,7 +380,7 @@ namespace NotAllNeighbours.UI.Evidence
     /// <summary>
     /// Fade canvas group over time
     /// </summary>
-    private System.Collections.IEnumerator FadeCanvasGroup(CanvasGroup cg, float startAlpha, float endAlpha, float duration)
+    private global::System.Collections.IEnumerator FadeCanvasGroup(CanvasGroup cg, float startAlpha, float endAlpha, float duration)
     {
       float elapsedTime = 0f;
       cg.alpha = startAlpha;
@@ -395,7 +398,7 @@ namespace NotAllNeighbours.UI.Evidence
     /// <summary>
     /// Fade out and close journal
     /// </summary>
-    private System.Collections.IEnumerator FadeAndClose()
+    private global::System.Collections.IEnumerator FadeAndClose()
     {
       yield return FadeCanvasGroup(canvasGroup, 1f, 0f, 0.3f);
 

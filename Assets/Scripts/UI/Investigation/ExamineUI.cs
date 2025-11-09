@@ -29,7 +29,7 @@ namespace NotAllNeighbours.UI
             {
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<ExamineUI>();
+                    instance = FindFirstObjectByType<ExamineUI>();
                 }
                 return instance;
             }

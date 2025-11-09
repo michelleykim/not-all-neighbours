@@ -28,7 +28,7 @@ namespace NotAllNeighbours.Managers
             {
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<SceneTransitionManager>();
+                    instance = FindFirstObjectByType<SceneTransitionManager>();
                 }
                 return instance;
             }

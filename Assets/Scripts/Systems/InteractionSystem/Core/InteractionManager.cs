@@ -5,6 +5,8 @@ using NotAllNeighbours.Managers;
 using NotAllNeighbours.Evidence;
 using NotAllNeighbours.Dialogue;
 using NotAllNeighbours.NPC;
+using NotAllNeighbours.Core.Enums;
+using NotAllNeighbours.Systems.InteractionSystem.Interactables;
 
 namespace NotAllNeighbours.Interaction
 {
@@ -31,12 +33,12 @@ namespace NotAllNeighbours.Interaction
     {
       if (raycastDetector == null)
       {
-        raycastDetector = FindObjectOfType<RaycastDetector>();
+        raycastDetector = FindFirstObjectByType<RaycastDetector>();
       }
 
       if (investigationZoom == null)
       {
-        investigationZoom = FindObjectOfType<InvestigationZoom>();
+        investigationZoom = FindFirstObjectByType<InvestigationZoom>();
       }
 
       if (examineUI == null)
@@ -241,7 +243,7 @@ namespace NotAllNeighbours.Interaction
           string description = interactable.InteractionPrompt;
           bool isValidEvidence = false;
 
-          // Check for CollectableObject component first
+          // Check for CollectableObject component
           var collectableObj = interactableMono.GetComponent<CollectableObject>();
           if (collectableObj != null)
           {
@@ -254,15 +256,6 @@ namespace NotAllNeighbours.Interaction
             {
               Debug.Log("This evidence can only be photographed when zoomed in");
               return;
-            }
-          }
-          // Fallback to EvidenceObject for backwards compatibility
-          else
-          {
-            var evidenceObj = interactableMono.GetComponent<EvidenceObject>();
-            if (evidenceObj != null)
-            {
-              isValidEvidence = true;
             }
           }
 

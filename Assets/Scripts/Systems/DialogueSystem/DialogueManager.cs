@@ -39,7 +39,7 @@ namespace NotAllNeighbours.Dialogue
       {
         if (instance == null)
         {
-          instance = FindObjectOfType<DialogueManager>();
+          instance = FindFirstObjectByType<DialogueManager>();
         }
         return instance;
       }
@@ -62,7 +62,7 @@ namespace NotAllNeighbours.Dialogue
       // Auto-find UI components if not assigned
       if (dialogueUI == null)
       {
-        dialogueUI = FindObjectOfType<DialogueUI>();
+        dialogueUI = FindFirstObjectByType<DialogueUI>();
         if (dialogueUI == null)
         {
           Debug.LogWarning("DialogueManager: DialogueUI not found! Please assign it in the inspector.");
@@ -71,7 +71,7 @@ namespace NotAllNeighbours.Dialogue
 
       if (statsDisplayUI == null)
       {
-        statsDisplayUI = FindObjectOfType<StatsDisplayUI>();
+        statsDisplayUI = FindFirstObjectByType<StatsDisplayUI>();
         if (statsDisplayUI == null)
         {
           Debug.LogWarning("DialogueManager: StatsDisplayUI not found! Please assign it in the inspector.");

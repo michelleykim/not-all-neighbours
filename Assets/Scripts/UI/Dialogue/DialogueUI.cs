@@ -109,7 +109,7 @@ namespace NotAllNeighbours.UI.Dialogue
     /// <param name="currentClarity">Current clarity value for requirement checking</param>
     public void DisplayOptions(
         List<DialogueOption> options,
-        System.Action<DialogueOption> onOptionSelected,
+        global::System.Action<DialogueOption> onOptionSelected,
         float currentSanity,
         float currentClarity)
     {
@@ -134,7 +134,7 @@ namespace NotAllNeighbours.UI.Dialogue
     private void CreateOptionButton(
         DialogueOption option,
         bool isAvailable,
-        System.Action<DialogueOption> onOptionSelected,
+        global::System.Action<DialogueOption> onOptionSelected,
         float currentSanity,
         float currentClarity)
     {
@@ -232,7 +232,7 @@ namespace NotAllNeighbours.UI.Dialogue
     /// <summary>
     /// Fade canvas group over time
     /// </summary>
-    private System.Collections.IEnumerator FadeCanvasGroup(CanvasGroup cg, float startAlpha, float endAlpha, float duration)
+    private global::System.Collections.IEnumerator FadeCanvasGroup(CanvasGroup cg, float startAlpha, float endAlpha, float duration)
     {
       float elapsedTime = 0f;
       cg.alpha = startAlpha;
@@ -250,7 +250,7 @@ namespace NotAllNeighbours.UI.Dialogue
     /// <summary>
     /// Fade out and then hide panel
     /// </summary>
-    private System.Collections.IEnumerator FadeAndHidePanel()
+    private global::System.Collections.IEnumerator FadeAndHidePanel()
     {
       yield return FadeCanvasGroup(canvasGroup, 1f, 0f, fadeOutDuration);
 

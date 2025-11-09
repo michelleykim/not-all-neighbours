@@ -40,7 +40,7 @@ namespace NotAllNeighbours.Evidence
       {
         if (instance == null)
         {
-          instance = FindObjectOfType<PhotographySystem>();
+          instance = FindFirstObjectByType<PhotographySystem>();
         }
         return instance;
       }
@@ -59,7 +59,7 @@ namespace NotAllNeighbours.Evidence
       // Auto-find PhotoCounterUI if not assigned
       if (photoCounterUI == null)
       {
-        photoCounterUI = FindObjectOfType<PhotoCounterUI>();
+        photoCounterUI = FindFirstObjectByType<PhotoCounterUI>();
         if (photoCounterUI == null)
         {
           Debug.LogWarning("PhotographySystem: PhotoCounterUI not found! Please assign it in the inspector.");

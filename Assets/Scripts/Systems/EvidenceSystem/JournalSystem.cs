@@ -38,7 +38,7 @@ namespace NotAllNeighbours.Evidence
       {
         if (instance == null)
         {
-          instance = FindObjectOfType<JournalSystem>();
+          instance = FindFirstObjectByType<JournalSystem>();
         }
         return instance;
       }
@@ -62,7 +62,7 @@ namespace NotAllNeighbours.Evidence
       // Auto-find JournalUI if not assigned
       if (journalUI == null)
       {
-        journalUI = FindObjectOfType<JournalUI>();
+        journalUI = FindFirstObjectByType<JournalUI>();
         if (journalUI == null)
         {
           Debug.LogWarning("JournalSystem: JournalUI not found! Please assign it in the inspector.");
