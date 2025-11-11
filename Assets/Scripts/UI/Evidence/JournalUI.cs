@@ -45,6 +45,8 @@ namespace NotAllNeighbours.UI.Evidence
     private List<JournalEntry> currentPhotos = new List<JournalEntry>();
     private int currentPhotoIndex = 0;
     private int filterDay = -1; // -1 = show all days
+    private bool awakeCompleted = false; // Track if Awake finished successfully
+    private bool listenersAdded = false; // Track if button listeners were added
 
     // Public property for accessing page flip duration
     public float PageFlipDuration => pageFlipDuration;
@@ -105,6 +107,7 @@ namespace NotAllNeighbours.UI.Evidence
       {
         closeButton.onClick.AddListener(CloseJournal);
         Debug.Log("JournalUI: Close button listener added");
+        listenersAdded = true; // Mark that at least one listener was added
       }
       else
       {
@@ -127,6 +130,9 @@ namespace NotAllNeighbours.UI.Evidence
       {
         Debug.LogWarning("JournalUI: journalPanel is null!");
       }
+
+      awakeCompleted = true;
+      Debug.Log($"JournalUI: Awake completed - listenersAdded: {listenersAdded}");
     }
 
     /// <summary>
@@ -496,6 +502,20 @@ namespace NotAllNeighbours.UI.Evidence
     {
       Debug.Log("=== JournalUI Button Verification ===");
 
+      // Check if Awake was called
+      Debug.Log($"Awake Completed: {awakeCompleted}");
+      Debug.Log($"Listeners Added: {listenersAdded}");
+
+      if (!awakeCompleted)
+      {
+        Debug.LogError("  !! Awake() has not run yet! This component may not be initialized.");
+      }
+
+      if (!listenersAdded)
+      {
+        Debug.LogError("  !! No button listeners were added! Check if buttons are assigned in Inspector.");
+      }
+
       // Check journal panel
       Debug.Log($"journalPanel: {(journalPanel != null ? "Assigned" : "NULL")}");
       if (journalPanel != null)
@@ -520,7 +540,15 @@ namespace NotAllNeighbours.UI.Evidence
         Debug.Log($"  - GameObject: {closeButton.gameObject.name}");
         Debug.Log($"  - Active: {closeButton.gameObject.activeInHierarchy}");
         Debug.Log($"  - Interactable: {closeButton.interactable}");
-        Debug.Log($"  - Listener count: {closeButton.onClick.GetPersistentEventCount()}");
+        Debug.Log($"  - Persistent Listeners: {closeButton.onClick.GetPersistentEventCount()}");
+
+        // Check if Button component exists and is enabled
+        var buttonComponent = closeButton.GetComponent<Button>();
+        Debug.Log($"  - Button Component: {(buttonComponent != null ? "Present" : "MISSING")}");
+        if (buttonComponent != null)
+        {
+          Debug.Log($"  - Component Enabled: {buttonComponent.enabled}");
+        }
       }
 
       Debug.Log($"previousButton: {(previousButton != null ? "Assigned" : "NULL")}");
@@ -529,7 +557,7 @@ namespace NotAllNeighbours.UI.Evidence
         Debug.Log($"  - GameObject: {previousButton.gameObject.name}");
         Debug.Log($"  - Active: {previousButton.gameObject.activeInHierarchy}");
         Debug.Log($"  - Interactable: {previousButton.interactable}");
-        Debug.Log($"  - Listener count: {previousButton.onClick.GetPersistentEventCount()}");
+        Debug.Log($"  - Persistent Listeners: {previousButton.onClick.GetPersistentEventCount()}");
       }
 
       Debug.Log($"nextButton: {(nextButton != null ? "Assigned" : "NULL")}");
@@ -538,7 +566,7 @@ namespace NotAllNeighbours.UI.Evidence
         Debug.Log($"  - GameObject: {nextButton.gameObject.name}");
         Debug.Log($"  - Active: {nextButton.gameObject.activeInHierarchy}");
         Debug.Log($"  - Interactable: {nextButton.interactable}");
-        Debug.Log($"  - Listener count: {nextButton.onClick.GetPersistentEventCount()}");
+        Debug.Log($"  - Persistent Listeners: {nextButton.onClick.GetPersistentEventCount()}");
       }
 
       // Check for EventSystem
@@ -550,6 +578,8 @@ namespace NotAllNeighbours.UI.Evidence
         Debug.Log($"  - GameObject: {eventSystem.gameObject.name}");
       }
 
+      Debug.Log("=== NOTE: Listener count shows 0 because AddListener() adds runtime listeners,");
+      Debug.Log("=== not persistent ones. Check console for 'listener added' messages from Awake.");
       Debug.Log("=================================");
     }
 
