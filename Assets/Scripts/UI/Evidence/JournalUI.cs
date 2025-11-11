@@ -578,9 +578,148 @@ namespace NotAllNeighbours.UI.Evidence
         Debug.Log($"  - GameObject: {eventSystem.gameObject.name}");
       }
 
+      // Check Canvas and GraphicRaycaster
+      Canvas canvas = GetComponentInParent<Canvas>();
+      Debug.Log($"Canvas: {(canvas != null ? "Found" : "MISSING!")}");
+      if (canvas != null)
+      {
+        Debug.Log($"  - GameObject: {canvas.gameObject.name}");
+        Debug.Log($"  - Render Mode: {canvas.renderMode}");
+        Debug.Log($"  - Enabled: {canvas.enabled}");
+
+        UnityEngine.UI.GraphicRaycaster raycaster = canvas.GetComponent<UnityEngine.UI.GraphicRaycaster>();
+        Debug.Log($"  - GraphicRaycaster: {(raycaster != null ? "Present" : "MISSING - THIS IS THE PROBLEM!")}");
+        if (raycaster != null)
+        {
+          Debug.Log($"    - Enabled: {raycaster.enabled}");
+          Debug.Log($"    - Ignore Reversed Graphics: {raycaster.ignoreReversedGraphics}");
+          Debug.Log($"    - Blocking Objects: {raycaster.blockingObjects}");
+        }
+        else
+        {
+          Debug.LogError("  !! GraphicRaycaster is MISSING! Add a GraphicRaycaster component to the Canvas!");
+        }
+      }
+
+      // Check if buttons have raycast targets
+      if (closeButton != null)
+      {
+        Image buttonImage = closeButton.GetComponent<Image>();
+        Debug.Log($"CloseButton Image: {(buttonImage != null ? "Present" : "Missing")}");
+        if (buttonImage != null)
+        {
+          Debug.Log($"  - Raycast Target: {buttonImage.raycastTarget} {(buttonImage.raycastTarget ? "" : "- DISABLED! Enable this!")}");
+        }
+      }
+
+      if (previousButton != null)
+      {
+        Image buttonImage = previousButton.GetComponent<Image>();
+        Debug.Log($"PreviousButton Image: {(buttonImage != null ? "Present" : "Missing")}");
+        if (buttonImage != null)
+        {
+          Debug.Log($"  - Raycast Target: {buttonImage.raycastTarget} {(buttonImage.raycastTarget ? "" : "- DISABLED! Enable this!")}");
+        }
+      }
+
+      if (nextButton != null)
+      {
+        Image buttonImage = nextButton.GetComponent<Image>();
+        Debug.Log($"NextButton Image: {(buttonImage != null ? "Present" : "Missing")}");
+        if (buttonImage != null)
+        {
+          Debug.Log($"  - Raycast Target: {buttonImage.raycastTarget} {(buttonImage.raycastTarget ? "" : "- DISABLED! Enable this!")}");
+        }
+      }
+
       Debug.Log("=== NOTE: Listener count shows 0 because AddListener() adds runtime listeners,");
       Debug.Log("=== not persistent ones. Check console for 'listener added' messages from Awake.");
       Debug.Log("=================================");
+    }
+
+    /// <summary>
+    /// Attempt to automatically fix common UI raycast issues
+    /// </summary>
+    [ContextMenu("Auto-Fix UI Raycast Issues")]
+    public void AutoFixRaycastIssues()
+    {
+      Debug.Log("=== Attempting to Auto-Fix UI Raycast Issues ===");
+
+      int issuesFixed = 0;
+
+      // Ensure Canvas has GraphicRaycaster
+      Canvas canvas = GetComponentInParent<Canvas>();
+      if (canvas != null)
+      {
+        UnityEngine.UI.GraphicRaycaster raycaster = canvas.GetComponent<UnityEngine.UI.GraphicRaycaster>();
+        if (raycaster == null)
+        {
+          canvas.gameObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+          Debug.Log("✓ Added GraphicRaycaster to Canvas");
+          issuesFixed++;
+        }
+      }
+
+      // Ensure button Images have raycast target enabled
+      if (closeButton != null)
+      {
+        Image img = closeButton.GetComponent<Image>();
+        if (img != null && !img.raycastTarget)
+        {
+          img.raycastTarget = true;
+          Debug.Log("✓ Enabled raycast target on CloseButton");
+          issuesFixed++;
+        }
+      }
+
+      if (previousButton != null)
+      {
+        Image img = previousButton.GetComponent<Image>();
+        if (img != null && !img.raycastTarget)
+        {
+          img.raycastTarget = true;
+          Debug.Log("✓ Enabled raycast target on PreviousButton");
+          issuesFixed++;
+        }
+      }
+
+      if (nextButton != null)
+      {
+        Image img = nextButton.GetComponent<Image>();
+        if (img != null && !img.raycastTarget)
+        {
+          img.raycastTarget = true;
+          Debug.Log("✓ Enabled raycast target on NextButton");
+          issuesFixed++;
+        }
+      }
+
+      // Ensure CanvasGroup allows raycasts
+      if (canvasGroup != null)
+      {
+        if (!canvasGroup.blocksRaycasts || !canvasGroup.interactable)
+        {
+          canvasGroup.blocksRaycasts = true;
+          canvasGroup.interactable = true;
+          Debug.Log("✓ Enabled CanvasGroup interaction");
+          issuesFixed++;
+        }
+      }
+
+      Debug.Log($"=== Auto-Fix Complete: {issuesFixed} issue(s) fixed ===");
+
+      if (issuesFixed > 0)
+      {
+        Debug.Log("Please verify the buttons work now by opening the journal and clicking them.");
+      }
+      else
+      {
+        Debug.Log("No common issues found. The problem may be more complex.");
+        Debug.Log("Check for: ");
+        Debug.Log("  1. Other UI elements in front of the buttons");
+        Debug.Log("  2. CanvasGroup on parent objects blocking raycasts");
+        Debug.Log("  3. Sorting order issues");
+      }
     }
 
     /// <summary>
